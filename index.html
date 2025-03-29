@@ -1,176 +1,70 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>চারিগ্রাম গোল্ড মার্কেট - লগইন</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kalpurush&display=swap" rel="stylesheet" />
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-  <style>
-    body {
-      font-family: 'Kalpurush', sans-serif;
-      background: linear-gradient(to right, #fceabb, #f8b500);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 400px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #b57f00;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border: none;
-      background-color: #ffc107;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #e0a800;
-    }
-    .options {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-    .options label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .switch-auth {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .switch-auth span {
-      cursor: pointer;
-      color: #1a73e8;
-      text-decoration: underline;
-    }
-    .msg {
-      color: red;
-      font-size: 14px;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kitco Gold Live</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        .iframe-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: -1500px;  /* Adjust to show specific area */
+            left: -140px;
+            width: 1500px;  /* Original size for zoom */
+            height: 1000px;
+            border: none;
+            transform: scale(2.5);  /* Zoom */
+            transform-origin: top left;
+        }
+        .custom-heading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #FFD700;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            padding: 16px;
+            z-index: 10;
+            font-size: 20px;
+        }
+
+        /* Mobile View Fix */
+        @media (max-width: 768px) {
+            .iframe-container iframe {
+                top: -815px;  /* Adjust crop for mobile */
+                left: -194px;
+                width: 1200px; /* Adjust width for mobile */
+                height: 1200px; /* Adjust height for mobile */
+                transform: scale(1.4);  /* Zoom in to crop properly */
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-  <h2 id="formTitle">লগইন করুন</h2>
-
-  <input type="email" id="email" placeholder="ইমেইল লিখুন" required />
-  <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" required />
-
-  <div class="options">
-    <label><input type="checkbox" id="rememberMe" /> মনে রাখুন</label>
-    <span style="cursor:pointer; color:#d32f2f;" onclick="forgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</span>
-  </div>
-
-  <button onclick="login()">লগইন</button>
-  <div class="switch-auth">নতুন ব্যবহারকারী? <span onclick="toggleForm()">সাইন আপ করুন</span></div>
-
-  <div class="msg" id="message"></div>
-</div>
-
-<!-- Firebase Config -->
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
-    authDomain: "cgbazar-a40c0.firebaseapp.com",
-    projectId: "cgbazar-a40c0",
-    storageBucket: "cgbazar-a40c0.firebasestorage.app",
-    messagingSenderId: "33145540262",
-    appId: "1:33145540262:web:2820f803fb1548458f6e67",
-    measurementId: "G-96NYF34CWB"
-  };
-  firebase.initializeApp(firebaseConfig);
-</script>
-
-<!-- Auth Logic -->
-<script>
-  let isLogin = true;
-
-  function toggleForm() {
-    isLogin = !isLogin;
-    document.getElementById("formTitle").innerText = isLogin ? "লগইন করুন" : "সাইন আপ করুন";
-    document.querySelector("button").innerText = isLogin ? "লগইন" : "সাইন আপ";
-    document.querySelector(".switch-auth").innerHTML = isLogin
-      ? 'নতুন ব্যবহারকারী? <span onclick="toggleForm()">সাইন আপ করুন</span>'
-      : 'আগেই একাউন্ট আছে? <span onclick="toggleForm()">লগইন করুন</span>';
-    document.getElementById("message").innerText = "";
-  }
-
-  function login() {
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
-    const remember = document.getElementById("rememberMe").checked;
-
-    const persistence = remember
-      ? firebase.auth.Auth.Persistence.LOCAL
-      : firebase.auth.Auth.Persistence.SESSION;
-
-    firebase.auth().setPersistence(persistence).then(() => {
-      if (isLogin) {
-        return firebase.auth().signInWithEmailAndPassword(email, pass);
-      } else {
-        return firebase.auth().createUserWithEmailAndPassword(email, pass);
-      }
-    }).then((user) => {
-      window.location.href = "page2.html"; // ✅ logged in -> go to page2
-    }).catch((error) => {
-      document.getElementById("message").innerText = error.message;
-    });
-  }
-
-  function forgotPassword() {
-    const email = document.getElementById("email").value;
-    if (!email) {
-      document.getElementById("message").innerText = "ইমেইল লিখুন";
-      return;
-    }
-    firebase.auth().sendPasswordResetEmail(email)
-      .then(() => {
-        document.getElementById("message").innerText = "রিসেট লিংক পাঠানো হয়েছে!";
-      })
-      .catch((error) => {
-        document.getElementById("message").innerText = error.message;
-      });
-  }
-
-  // Auto login redirect
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      window.location.href = "page2.html";
-    }
-  });
-</script>
-
+    <div class="custom-heading">Live Kitco Gold</div> 
+    <div class="iframe-container">
+        <iframe src="https://www.kitco.com/charts/gold" scrolling="no"></iframe>
+    </div>
 </body>
 </html>
