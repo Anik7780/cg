@@ -65,16 +65,25 @@
             firebase.auth.Auth.Persistence.SESSION
         );
 
-       // লগিন ফাংশন
-function login() {
+      function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    auth.signInWithEmailAndPassword(email, password)
+    const rememberMe = document.getElementById('rememberMe').checked;
+
+    // Set Persistence before login
+    const persistence = rememberMe ? 
+        firebase.auth.Auth.Persistence.LOCAL : 
+        firebase.auth.Auth.Persistence.SESSION;
+
+    auth.setPersistence(persistence)
         .then(() => {
-            window.location.href = "dashboard.html"; // ড্যাশবোর্ডে রিডাইরেক্ট
+            return auth.signInWithEmailAndPassword(email, password);
+        })
+        .then(() => {
+            window.location.href = "dashboard.html";
         })
         .catch((error) => {
-            alert("এরর: " + error.message);
+            alert("Error: " + error.message);
         });
 }
 
