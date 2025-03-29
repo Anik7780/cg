@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্বর্ণের ক্যালকুলেটর</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: #f3c623; text-align: center; padding: 15px; }
+        .calculator {
+            background: #ffffff; padding: 15px; width: 90%; max-width: 320px; margin: auto; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 { font-size: 20px; margin-bottom: 10px; border-bottom: 2px solid #f3c623; padding-bottom: 5px; color: #333; }
+        input, button {
+            width: 100%; padding: 8px; margin: 5px 0; border-radius: 6px; border: 1px solid #ddd; font-size: 14px;
+        }
+        button { background: #f3c623; color: white; cursor: pointer; border: none; font-weight: bold; }
+        button:hover { background: #d4a317; }
+        #result, #finalResult { margin-top: 10px; font-size: 16px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>স্বর্ণের ক্যালকুলেটর</h2>
+        <input type="number" id="customValue" placeholder="স্বর্ণের দাম (প্রতি ভরি)" oninput="updateResults()">
+        <input type="number" id="optionalValue" placeholder="মজুরি (প্রতি ভরি)" oninput="calculateResults()">
+        
+        <input type="number" id="input1" placeholder="ভরি" min="0" oninput="calculateResults()">
+        <input type="number" id="input2" placeholder="আনা" min="0" oninput="calculateResults()">
+        <input type="number" id="input3" placeholder="রত্তি" min="0" oninput="calculateResults()">
+        <input type="number" id="input4" placeholder="পয়েন্ট" min="0" oninput="calculateResults()">
+        
+        <button onclick="clearFields()">🗑 পরিষ্কার করুন</button>
+        <button onclick="downloadReceipt()">🧾 রসিদ ডাউনলোড</button>
+
+        <div id="result"></div>
+        <div id="finalResult">মোট টাকা= ৳০</div>
+    </div>
+
+    <script>
+        let result1 = 0, totalWage = 0, points = 0;
+
+        function updateResults() {
+            const customValue = parseFloat(document.getElementById("customValue").value) || 0;
+            result1 = customValue / 960;
+            calculateResults();
+        }
+
+        function calculateResults() {
+            let input1 = parseFloat(document.getElementById('input1').value) || 0;
+            let input2 = parseFloat(document.getElementById('input2').value) || 0;
+            let input3 = parseFloat(document.getElementById('input3').value) || 0;
+            let input4 = parseFloat(document.getElementById('input4').value) || 0;
+            let optionalValue = parseFloat(document.getElementById('optionalValue').value) || 0;
+
+            points = (input1 * 960) + (input2 * 60) + (input3 * 10) + input4;
+            totalWage = (optionalValue / 960) * points;
+            
+            let finalVori = Math.floor(points / 960);
+            let remainingPoints = points % 960;
+            let finalAna = Math.floor(remainingPoints / 60);
+            remainingPoints %= 60;
+            let finalRotti = Math.floor(remainingPoints / 10);
+            let finalPoint = remainingPoints % 10;
+            let gramResult = (points / 960) * 11.66;
+            
+            document.getElementById("result").innerHTML = `📏 ওজন: ${finalVori} ভরি, ${finalAna} আনা, ${finalRotti} রত্তি, ${finalPoint} পয়েন্ট | ✨ ${gramResult.toFixed(2)}g`;
+            let finalResult = (result1 * points) + totalWage;
+            document.getElementById("finalResult").innerText = `🟢 মোট টাকা= ৳${finalResult.toFixed(2)}`;
+        }
+
+        function clearFields() {
+            if (confirm('আপনি কি সব তথ্য মুছতে চান?')) {
+                document.querySelectorAll('input').forEach(input => input.value = '');
+                document.getElementById("result").innerHTML = "";
+                document.getElementById("finalResult").innerText = 'মোট টাকা= ৳০';
+            }
+        }
+
+        function downloadReceipt() {
+            let customValue = parseFloat(document.getElementById("customValue").value) || 0;
+            let optionalValue = parseFloat(document.getElementById("optionalValue").value) || 0;
+            let currentDate = new Date().toLocaleString('bn-BD', { dateStyle: 'full', timeStyle: 'short' });
+
+            let finalVori = Math.floor(points / 960);
+            let remainingPoints = points % 960;
+            let finalAna = Math.floor(remainingPoints / 60);
+            remainingPoints %= 60;
+            let finalRotti = Math.floor(remainingPoints / 10);
+            let finalPoint = remainingPoints % 10;
+            let gramResult = (points / 960) * 11.66;
+            let finalResultText = document.getElementById('finalResult').innerText;
+
+            let receiptContent = `🔶 Charigram Gold Market 🔶
+-----------------------------------
+📅 রসিদ তৈরির সময়: ${currentDate}
+-----------------------------------
+💰 স্বর্ণের বর্তমান দাম: ৳${customValue} প্রতি ভরি
+পরিণত মান: ${finalVori} ভরি, ${finalAna} আনা, ${finalRotti} রত্তি, ${finalPoint} পয়েন্ট
+✨ ওজন: ${gramResult.toFixed(2)}g
+🔨 প্রতি ভরির মজুরি হার: ৳${optionalValue.toFixed(2)}
+💵 মোট মজুরি: ৳${totalWage.toFixed(2)}
+-----------------------------------
+${finalResultText}
+-----------------------------------
+✅ ধন্যবাদ! Charigram Gold Market-এ আবার আসবেন!`;
+
+            let blob = new Blob([receiptContent], { type: 'text/plain' });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Gold_Calculator_Receipt_${new Date().getTime()}.txt`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
