@@ -1,227 +1,176 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>চারিগ্রাম গোল্ড মার্কেট - সোনার দাম</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kalpurush&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #FFD700;  /* Gold */
-            --secondary: #1A237E; /* Deep Blue */
-            --accent: #C62828; /* Red */
-            --text: #2c3e50;
-        }
-
-        body {
-            font-family: 'Kalpurush', 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            background: linear-gradient(45deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Design */
-        .header {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-            color: white;
-            padding: 2rem 1rem;
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::after {
-            content: "";
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,160L48,149.3C96,139,192,117,288,128C384,139,480,181,576,176C672,171,768,117,864,101.3C960,85,1056,107,1152,122.7C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>');
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-        }
-
-        /* Navigation Buttons */
-        .nav-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 2rem 0;
-        }
-
-        .nav-btn {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-color: var(--primary);
-        }
-
-        .nav-btn i {
-            font-size: 1.8rem;
-            color: var(--primary);
-        }
-
-        .nav-btn.active {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .nav-btn.active i {
-            color: white;
-        }
-
-        /* Iframe Container */
-        .frame-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            position: relative;
-            min-height: 600px;
-        }
-
-        #contentFrame {
-            width: 100%;
-            height: 100%;
-            min-height: 600px;
-            border: none;
-        }
-
-        /* Loading Animation */
-        .loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-
-        .loader::after {
-            content: "";
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .header {
-                border-radius: 0 0 20px 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .nav-btn {
-                padding: 1rem;
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .nav-btn i {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>চারিগ্রাম গোল্ড মার্কেট - লগইন</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kalpurush&display=swap" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+  <style>
+    body {
+      font-family: 'Kalpurush', sans-serif;
+      background: linear-gradient(to right, #fceabb, #f8b500);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #b57f00;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      background-color: #ffc107;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e0a800;
+    }
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .switch-auth {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .switch-auth span {
+      cursor: pointer;
+      color: #1a73e8;
+      text-decoration: underline;
+    }
+    .msg {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="container">
-            <h1>চারিগ্রাম গোল্ড মার্কেট</h1>
-            <p>সোনার বর্তমান বাজারদর ও হিসাব-নিকাশ</p>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="nav-buttons">
-            <button class="nav-btn active" onclick="showHome(event)">
-                <i class="fas fa-chart-line"></i>
-                <span>বাজারের দাম</span>
-            </button>
-            
-            <button class="nav-btn" onclick="showMarketPrice(event)">
-                <i class="fas fa-coins"></i>
-                <span>লাইভ প্রাইস</span>
-            </button>
-            
-            <button class="nav-btn" onclick="showCalculator(event)">
-                <i class="fas fa-calculator"></i>
-                <span>ক্যালকুলেটর</span>
-            </button>
-        </div>
+<div class="container">
+  <h2 id="formTitle">লগইন করুন</h2>
 
-        <div class="frame-container">
-            <div class="loader"></div>
-            <iframe id="contentFrame" src="page2.html" loading="lazy"></iframe>
-        </div>
-    </div>
+  <input type="email" id="email" placeholder="ইমেইল লিখুন" required />
+  <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" required />
 
-    <script>
-        // Enhanced Loading Animation
-        const loader = document.querySelector('.loader');
-        const iframe = document.getElementById('contentFrame');
+  <div class="options">
+    <label><input type="checkbox" id="rememberMe" /> মনে রাখুন</label>
+    <span style="cursor:pointer; color:#d32f2f;" onclick="forgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</span>
+  </div>
 
-        iframe.addEventListener('loadstart', () => {
-            loader.style.display = 'block';
-        });
+  <button onclick="login()">লগইন</button>
+  <div class="switch-auth">নতুন ব্যবহারকারী? <span onclick="toggleForm()">সাইন আপ করুন</span></div>
 
-        iframe.addEventListener('load', () => {
-            loader.style.display = 'none';
-        });
+  <div class="msg" id="message"></div>
+</div>
 
-        // Active Button Management
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+<!-- Firebase Config -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+    authDomain: "cgbazar-a40c0.firebaseapp.com",
+    projectId: "cgbazar-a40c0",
+    storageBucket: "cgbazar-a40c0.firebasestorage.app",
+    messagingSenderId: "33145540262",
+    appId: "1:33145540262:web:2820f803fb1548458f6e67",
+    measurementId: "G-96NYF34CWB"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
 
-        function showHome(event) {
-            iframe.src = 'page2.html';
-        }
+<!-- Auth Logic -->
+<script>
+  let isLogin = true;
 
-        function showMarketPrice(event) {
-            iframe.src = 'page1.html';
-        }
+  function toggleForm() {
+    isLogin = !isLogin;
+    document.getElementById("formTitle").innerText = isLogin ? "লগইন করুন" : "সাইন আপ করুন";
+    document.querySelector("button").innerText = isLogin ? "লগইন" : "সাইন আপ";
+    document.querySelector(".switch-auth").innerHTML = isLogin
+      ? 'নতুন ব্যবহারকারী? <span onclick="toggleForm()">সাইন আপ করুন</span>'
+      : 'আগেই একাউন্ট আছে? <span onclick="toggleForm()">লগইন করুন</span>';
+    document.getElementById("message").innerText = "";
+  }
 
-        function showCalculator(event) {
-            iframe.src = 'page3.html';
-        }
-    </script>
+  function login() {
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+    const remember = document.getElementById("rememberMe").checked;
+
+    const persistence = remember
+      ? firebase.auth.Auth.Persistence.LOCAL
+      : firebase.auth.Auth.Persistence.SESSION;
+
+    firebase.auth().setPersistence(persistence).then(() => {
+      if (isLogin) {
+        return firebase.auth().signInWithEmailAndPassword(email, pass);
+      } else {
+        return firebase.auth().createUserWithEmailAndPassword(email, pass);
+      }
+    }).then((user) => {
+      window.location.href = "page2.html"; // ✅ logged in -> go to page2
+    }).catch((error) => {
+      document.getElementById("message").innerText = error.message;
+    });
+  }
+
+  function forgotPassword() {
+    const email = document.getElementById("email").value;
+    if (!email) {
+      document.getElementById("message").innerText = "ইমেইল লিখুন";
+      return;
+    }
+    firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        document.getElementById("message").innerText = "রিসেট লিংক পাঠানো হয়েছে!";
+      })
+      .catch((error) => {
+        document.getElementById("message").innerText = error.message;
+      });
+  }
+
+  // Auto login redirect
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      window.location.href = "page2.html";
+    }
+  });
+</script>
+
 </body>
 </html>
