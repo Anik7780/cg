@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Gold Price & Market Rates</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      background-color: #f8f9fa; 
+    }
+    h1 { 
+      color: #333; 
+    }
+    .table-container { 
+      width: 90%; 
+      max-width: 600px; 
+      margin: auto; 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      margin-bottom: 20px; 
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-top: 10px; 
+    }
+    th { 
+      background-color: gold; 
+      padding: 12px; 
+      border: 1px solid #ddd; 
+      color: black; 
+      font-weight: bold; 
+    }
+    td { 
+      padding: 12px; 
+      border: 1px solid #ddd; 
+      text-align: center; 
+    }
+    tr:nth-child(even) { 
+      background-color: #f2f2f2; 
+    }
+    .highlight { 
+      background-color: gold !important; 
+      font-weight: bold; 
+    }
+    .price { 
+      color: green; 
+      font-weight: bold; 
+    }
+    .timestamp { 
+      margin-top: 10px; 
+      font-size: 14px; 
+      color: #666; 
+    }
+  </style>
+</head>
+<body>
+  <h1> চারিগ্রাম ও ঢাকার স্বর্ণের বাজার দর </h1>
+  
+  <div class="table-container">
+    <h2>চারিগ্রাম জুয়েলারী বাজার দর</h2>
+    <p id="timestamp1" class="timestamp">Loading...</p>
+    <table id="marketTable1">
+      <thead>
+        <tr>
+          <th>স্বর্ণ</th>
+          <th>বিবরণ</th>
+          <th>মূল্য</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="table-container">
+    <h2>ঢাকার স্বর্ণের বাজার দর</h2>
+    <p id="timestamp2" class="timestamp">Loading...</p>
+    <table id="marketTable2">
+      <thead>
+        <tr>
+          <th>স্বর্ণ</th>
+          <th>বিবরণ</th>
+          <th>মূল্য</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    async function fetchMarketRates(sheetUrl, tableId, timestampId, highlightCategory) {
+      try {
+        const response = await fetch(sheetUrl);
+        const csvText = await response.text();
+        // CSV ডেটা comma (,) দ্বারা বিভক্ত ধরা হয়েছে
+        const rows = csvText.split("\n").map(row => row.split(","));
+        let tableBody = "";
+        let lastUpdated = "Not Available";
+        
+        // নির্দিষ্ট হাইলাইটের জন্য array:
+        // Sheet1: যদি প্রথম কলামের মান "স্বর্ণ", "পুরাতন স্বর্ণ", "রুপা" হয়
+        // Sheet2: যদি প্রথম কলামের মান "স্বর্ণ", "পুরাতন স্বর্ণ" হয়
+        const highlightRowsSheet1 = ["স্বর্ণ", "পুরাতন স্বর্ণ", "রুপা"];
+        const highlightRowsSheet2 = ["স্বর্ণ", "পুরাতন স্বর্ণ"];
+  
+        for (let i = 0; i < rows.length; i++) {
+          // "Last Updated" বা "শেষ আপডেট" রো চেক করা
+          if (rows[i][0].includes("Last Updated") || rows[i][0].includes("শেষ আপডেট")) {
+            lastUpdated = rows[i][0]
+              .replace("Last Updated:", "")
+              .replace("শেষ আপডেট:", "")
+              .trim() + " " + (rows[i][1] ? rows[i][1].trim() : "");
+            continue;
+          }
+          if (rows[i].length >= 3) {
+            const category = rows[i][0].trim();
+            let rowClass = "";
+  
+            if (highlightCategory === "sheet1") {
+              if (highlightRowsSheet1.includes(category)) {
+                rowClass = "highlight";
+              }
+            } else if (highlightCategory === "sheet2") {
+              if (highlightRowsSheet2.includes(category)) {
+                rowClass = "highlight";
+              }
+            }
+  
+            tableBody += `
+              <tr>
+                <td class="${rowClass}">${rows[i][0]}</td>
+                <td class="${rowClass}">${rows[i][1]}</td>
+                <td class="price ${rowClass}">${rows[i][2]}</td>
+              </tr>
+            `;
+          }
+        }
+  
+        document.getElementById(tableId).innerHTML = `<tbody>${tableBody}</tbody>`;
+        document.getElementById(timestampId).innerText = `Last Updated: ${lastUpdated}`;
+      } catch (error) {
+        console.error(`Error fetching data from ${sheetUrl}:`, error);
+      }
+    }
+  
+    function updateData() {
+      const sheetUrl1 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQZHciJ3vmBxMds7ohHyTt8HLHBtjLFanV81BAsFVXRudIdN5Wi3jchbsr12hivpNp3orH8g2VrEN8/pub?output=csv";
+      const sheetUrl2 = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1Hfu0rcCERzmLswHMKnXT28qdzWVy4J6qcC5sJxYwogl6-orBgDlQwmX-xAqnQ6saqLKqdPgqnQDc/pub?output=csv";
+  
+      fetchMarketRates(sheetUrl1, "marketTable1", "timestamp1", "sheet1");
+      fetchMarketRates(sheetUrl2, "marketTable2", "timestamp2", "sheet2");
+    }
+  
+    updateData();
+    setInterval(updateData, 60000);
+  </script>
+</body>
+</html>
