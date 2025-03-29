@@ -1,117 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login/Signup</title>
-    <!-- Firebase SDK যোগ করুন -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    
-    <!-- মর্ডান UI এর জন্য CSS (উদাহরণ: Tailwind CSS) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CG Bazar - Auth</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK (compat version for easier implementation) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto mt-20 max-w-md">
-        <!-- লগিন ফর্ম -->
-        <div id="login-form" class="bg-white p-8 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-6">Login</h2>
-            <input type="email" id="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
-            <input type="password" id="password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2 class="text-2xl font-bold mb-6 text-center">Login to CG Bazar</h2>
             <div class="mb-4">
-                <input type="checkbox" id="rememberMe"> 
-                <label for="rememberMe">Remember Me</label>
+                <input type="email" id="email" placeholder="Email" class="w-full p-3 border rounded-lg">
             </div>
-            <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            <div class="mb-4">
+                <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg">
+            </div>
+            <div class="mb-4 flex items-center">
+                <input type="checkbox" id="rememberMe" class="mr-2">
+                <label for="rememberMe" class="text-gray-600">Remember Me</label>
+            </div>
+            <button onclick="loginUser()" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">
                 Login
             </button>
-            <p class="mt-4 text-center">
-                <a href="#" onclick="toggleForms()" class="text-blue-500">Create New Account</a> |
-                <a href="#" onclick="forgotPassword()" class="text-blue-500">Forgot Password?</a>
-            </p>
+            <div class="mt-4 text-center">
+                <a href="#" onclick="toggleForm('signupForm')" class="text-blue-600 hover:underline">Create New Account</a> |
+                <a href="#" onclick="toggleForm('forgotPasswordForm')" class="text-blue-600 hover:underline">Forgot Password?</a>
+            </div>
         </div>
 
-        <!-- সাইনআপ ফর্ম (প্রথমে হিডেন) -->
-        <div id="signup-form" class="bg-white p-8 rounded-lg shadow-md hidden">
-            <h2 class="text-2xl font-bold mb-6">Sign Up</h2>
-            <input type="email" id="signup-email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
-            <input type="password" id="signup-password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
-            <button onclick="signup()" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
-                Create Account
+        <!-- Signup Form (Hidden by default) -->
+        <div id="signupForm" class="hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center">Create Account</h2>
+            <div class="mb-4">
+                <input type="email" id="signupEmail" placeholder="Email" class="w-full p-3 border rounded-lg">
+            </div>
+            <div class="mb-4">
+                <input type="password" id="signupPassword" placeholder="Password (6+ characters)" class="w-full p-3 border rounded-lg">
+            </div>
+            <button onclick="signupUser()" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition">
+                Sign Up
             </button>
-            <p class="mt-4 text-center">
-                <a href="#" onclick="toggleForms()" class="text-blue-500">Back to Login</a>
-            </p>
+            <div class="mt-4 text-center">
+                <a href="#" onclick="toggleForm('loginForm')" class="text-blue-600 hover:underline">Back to Login</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Form (Hidden by default) -->
+        <div id="forgotPasswordForm" class="hidden">
+            <h2 class="text-2xl font-bold mb-6 text-center">Reset Password</h2>
+            <div class="mb-4">
+                <input type="email" id="resetEmail" placeholder="Enter your email" class="w-full p-3 border rounded-lg">
+            </div>
+            <button onclick="sendPasswordReset()" class="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition">
+                Send Reset Link
+            </button>
+            <div class="mt-4 text-center">
+                <a href="#" onclick="toggleForm('loginForm')" class="text-blue-600 hover:underline">Back to Login</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Firebase কনফিগারেশন
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
             authDomain: "cgbazar-a40c0.firebaseapp.com",
             projectId: "cgbazar-a40c0",
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
             messagingSenderId: "33145540262",
-            appId: "1:33145540262:web:2820f803fb1548458f6e67"
+            appId: "1:33145540262:web:2820f803fb1548458f6e67",
+            measurementId: "G-96NYF34CWB"
         };
 
-        // Firebase ইনিশিয়ালাইজ
+        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
 
-        // রিমেমবার মি ফাংশনালিটি
-        const rememberMe = document.getElementById('rememberMe');
-        auth.setPersistence(rememberMe.checked ? 
-            firebase.auth.Auth.Persistence.LOCAL : 
-            firebase.auth.Auth.Persistence.SESSION
-        );
-
-      function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const rememberMe = document.getElementById('rememberMe').checked;
-
-    // Set Persistence before login
-    const persistence = rememberMe ? 
-        firebase.auth.Auth.Persistence.LOCAL : 
-        firebase.auth.Auth.Persistence.SESSION;
-
-    auth.setPersistence(persistence)
-        .then(() => {
-            return auth.signInWithEmailAndPassword(email, password);
-        })
-        .then(() => {
-            window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-            alert("Error: " + error.message);
-        });
-}
-
-// সাইনআপ ফাংশন
-function signup() {
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(() => {
-            window.location.href = "dashboard.html"; // ড্যাশবোর্ডে রিডাইরেক্ট
-        })
-        .catch((error) => {
-            alert("এরর: " + error.message);
-        });
-}
-
-        // পাসওয়ার্ড রিসেট
-        function forgotPassword() {
-            const email = prompt("রিকোভারির ইমেইল দিন:");
-            auth.sendPasswordResetEmail(email)
-                .then(() => alert("রিসেট লিংক ইমেইলে পাঠানো হয়েছে!"))
-                .catch((error) => alert("এরর: " + error.message));
+        // Form Toggle Function
+        function toggleForm(formId) {
+            ['loginForm', 'signupForm', 'forgotPasswordForm'].forEach(form => {
+                document.getElementById(form).classList.toggle('hidden', form !== formId);
+            });
         }
 
-        // ফর্ম টগল (লগিন ↔ সাইনআপ)
-        function toggleForms() {
-            document.getElementById('login-form').classList.toggle('hidden');
-            document.getElementById('signup-form').classList.toggle('hidden');
+        // Login Function
+        function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            auth.setPersistence(rememberMe ? 
+                firebase.auth.Auth.Persistence.LOCAL : 
+                firebase.auth.Auth.Persistence.SESSION
+            ).then(() => {
+                return auth.signInWithEmailAndPassword(email, password);
+            }).then(() => {
+                window.location.href = "dashboard.html";
+            }).catch(error => {
+                alert(`Login Failed: ${error.message}`);
+            });
+        }
+
+        // Signup Function
+        function signupUser() {
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                alert('Account created successfully! Please login.');
+                toggleForm('loginForm');
+            }).catch(error => {
+                alert(`Signup Failed: ${error.message}`);
+            });
+        }
+
+        // Password Reset Function
+        function sendPasswordReset() {
+            const email = document.getElementById('resetEmail').value;
+            
+            auth.sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Password reset email sent! Check your inbox.');
+                toggleForm('loginForm');
+            }).catch(error => {
+                alert(`Error: ${error.message}`);
+            });
         }
     </script>
 </body>
