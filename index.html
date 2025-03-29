@@ -1,70 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Kitco Gold Live</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-        .iframe-container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            background: #fff;
-            overflow: hidden;
-        }
-        .iframe-container iframe {
-            position: absolute;
-            top: -1500px;  /* Adjust to show specific area */
-            left: -140px;
-            width: 1500px;  /* Original size for zoom */
-            height: 1000px;
-            border: none;
-            transform: scale(2.5);  /* Zoom */
-            transform-origin: top left;
-        }
-        .custom-heading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #FFD700;
-            color: black;
-            font-weight: bold;
-            text-align: center;
-            padding: 16px;
-            z-index: 10;
-            font-size: 20px;
+    <title>Login/Signup</title>
+    <!-- Firebase SDK যোগ করুন -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    
+    <!-- মর্ডান UI এর জন্য CSS (উদাহরণ: Tailwind CSS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-20 max-w-md">
+        <!-- লগিন ফর্ম -->
+        <div id="login-form" class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6">Login</h2>
+            <input type="email" id="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+            <input type="password" id="password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
+            <div class="mb-4">
+                <input type="checkbox" id="rememberMe"> 
+                <label for="rememberMe">Remember Me</label>
+            </div>
+            <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+                Login
+            </button>
+            <p class="mt-4 text-center">
+                <a href="#" onclick="toggleForms()" class="text-blue-500">Create New Account</a> |
+                <a href="#" onclick="forgotPassword()" class="text-blue-500">Forgot Password?</a>
+            </p>
+        </div>
+
+        <!-- সাইনআপ ফর্ম (প্রথমে হিডেন) -->
+        <div id="signup-form" class="bg-white p-8 rounded-lg shadow-md hidden">
+            <h2 class="text-2xl font-bold mb-6">Sign Up</h2>
+            <input type="email" id="signup-email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+            <input type="password" id="signup-password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
+            <button onclick="signup()" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
+                Create Account
+            </button>
+            <p class="mt-4 text-center">
+                <a href="#" onclick="toggleForms()" class="text-blue-500">Back to Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Firebase কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            authDomain: "cgbazar-a40c0.firebaseapp.com",
+            projectId: "cgbazar-a40c0",
+            storageBucket: "cgbazar-a40c0.firebasestorage.app",
+            messagingSenderId: "33145540262",
+            appId: "1:33145540262:web:2820f803fb1548458f6e67"
+        };
+
+        // Firebase ইনিশিয়ালাইজ
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(app);
+
+        // রিমেমবার মি ফাংশনালিটি
+        const rememberMe = document.getElementById('rememberMe');
+        auth.setPersistence(rememberMe.checked ? 
+            firebase.auth.Auth.Persistence.LOCAL : 
+            firebase.auth.Auth.Persistence.SESSION
+        );
+
+        // লগিন ফাংশন
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert("লগিন সফল!");
+                })
+                .catch((error) => {
+                    alert("এরর: " + error.message);
+                });
         }
 
-        /* Mobile View Fix */
-        @media (max-width: 768px) {
-            .iframe-container iframe {
-                top: -815px;  /* Adjust crop for mobile */
-                left: -194px;
-                width: 1200px; /* Adjust width for mobile */
-                height: 1200px; /* Adjust height for mobile */
-                transform: scale(1.4);  /* Zoom in to crop properly */
-            }
+        // সাইনআপ ফাংশন
+        function signup() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    alert("অ্যাকাউন্ট ক্রিয়েট হয়েছে!");
+                    toggleForms();
+                })
+                .catch((error) => {
+                    alert("এরর: " + error.message);
+                });
         }
-    </style>
-</head>
-<body>
-    <div class="custom-heading">Live Kitco Gold</div> 
-    <div class="iframe-container">
-        <iframe src="https://www.kitco.com/charts/gold" scrolling="no"></iframe>
-    </div>
+
+        // পাসওয়ার্ড রিসেট
+        function forgotPassword() {
+            const email = prompt("রিকোভারির ইমেইল দিন:");
+            auth.sendPasswordResetEmail(email)
+                .then(() => alert("রিসেট লিংক ইমেইলে পাঠানো হয়েছে!"))
+                .catch((error) => alert("এরর: " + error.message));
+        }
+
+        // ফর্ম টগল (লগিন ↔ সাইনআপ)
+        function toggleForms() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
