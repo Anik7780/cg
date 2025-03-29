@@ -11,7 +11,7 @@
         .gold-table {
             width: 90%;
             max-width: 600px;
-            margin: auto;
+            margin: 20px auto;
             background: #000;
             padding: 20px;
             border-radius: 10px;
@@ -35,7 +35,7 @@
         }
         .gold-table tr:nth-child(even) { background-color: #222; }
         .highlight { font-weight: bold; color: #ffcc00; }
-        #timestampBDT {
+        #timestampBDT, #additionalTimestampBDT {
             margin-top: 10px;
             font-size: 16px;
             font-weight: bold;
@@ -64,6 +64,7 @@
     <div class="container mx-auto mt-8 p-4">
         <h1 class="text-3xl font-bold text-center mb-8">লাইভ স্বর্ণের দাম (BDT)</h1>
         
+        <!-- প্রথম টেবিল -->
         <div class="gold-table">
             <table>
                 <thead>
@@ -79,12 +80,29 @@
             </table>
             <p id="timestampBDT"></p>
         </div>
+
+        <!-- দ্বিতীয় টেবিল -->
+        <div class="gold-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>স্বর্ণ</th>
+                        <th>বিবরণ</th>
+                        <th>মূল্য (BDT)</th>
+                    </tr>
+                </thead>
+                <tbody id="additionalGoldTableBDT">
+                    <tr><td colspan="3">লোড হচ্ছে...</td></tr>
+                </tbody>
+            </table>
+            <p id="additionalTimestampBDT"></p>
+        </div>
     </div>
 
     <script>
         // Firebase Configuration
         const firebaseConfig = {
-             apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
             authDomain: "cgbazar-a40c0.firebaseapp.com",
             projectId: "cgbazar-a40c0",
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
@@ -117,12 +135,12 @@
 
                 let csvText = await response.text();
                 let rows = csvText.split("\n").map(row => row.split(","));
+                
+                // প্রথম টেবিলের ডেটা প্রসেসিং
                 let basePricePerVori = parseFloat(rows[0][1]);
                 let lastUpdatedRaw = rows[0][2];
-
                 let updatedGoldPricePerVori = Math.round(basePricePerVori * 1.05);
                 let goldPricePerGram = Math.round(updatedGoldPricePerVori / 11.66);
-                let lastUpdatedFormatted = lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim();
 
                 document.getElementById("goldTableBDT").innerHTML = `
                     <tr>
@@ -164,10 +182,44 @@
                 `;
 
                 document.getElementById("timestampBDT").innerHTML = 
-                    `সর্বশেষ আপডেট: <span style="font-weight: bold; color: red;">${lastUpdatedFormatted}</span>`;
+                    `সর্বশেষ আপডেট: <span style="font-weight: bold; color: red;">${lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim()}</span>`;
+
+                // দ্বিতীয় টেবিলের ডেটা প্রসেসিং
+                let additionalTable = document.getElementById("additionalGoldTableBDT");
+                additionalTable.innerHTML = "";
+                
+                for (let i = 3; i <= 6; i++) {
+                    let rowData = rows[i];
+                    if (!rowData || rowData.length < 3) continue;
+
+                    let row = document.createElement("tr");
+
+                    let typeCell = document.createElement("td");
+                    typeCell.textContent = rowData[0].trim();
+                    row.appendChild(typeCell);
+
+                    let descCell = document.createElement("td");
+                    descCell.textContent = rowData[1].trim();
+                    row.appendChild(descCell);
+
+                    let priceCell = document.createElement("td");
+                    priceCell.className = "highlight";
+                    priceCell.textContent = `৳${rowData[2].trim()}`;
+                    row.appendChild(priceCell);
+
+                    additionalTable.appendChild(row);
+                }
+
+                // দ্বিতীয় টেবিলের টাইমস্ট্যাম্প
+                let additionalTimestamp = (rows[7]?.[0] || "") + " " + (rows[8]?.[0] || "");
+                document.getElementById("additionalTimestampBDT").innerHTML = 
+                    `সর্বশেষ আপডেট: <span style="font-weight: bold; color: red;">${additionalTimestamp.trim()}</span>`;
+
             } catch (error) {
                 console.error("Error fetching data:", error);
                 document.getElementById("goldTableBDT").innerHTML = 
+                    `<tr><td colspan="3">⚠️ আপডেট করতে সমস্যা হয়েছে!</td></tr>`;
+                document.getElementById("additionalGoldTableBDT").innerHTML = 
                     `<tr><td colspan="3">⚠️ আপডেট করতে সমস্যা হয়েছে!</td></tr>`;
             }
         }
