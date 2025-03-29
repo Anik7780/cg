@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- একই নেভিগেশন বার -->
+    <nav class="bg-blue-600 text-white p-4">
+        <!-- dashboard.html এর মতো একই নেভিগেশন কোড -->
+    </nav>
+
+    <!-- পেজ স্পেসিফিক কন্টেন্ট -->
+    <div class="container mx-auto mt-8 p-4">
+        <h2 class="text-3xl font-bold mb-6">Page 1 Content</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <!-- আপনার কন্টেন্ট এখানে যোগ করুন -->
+        </div>
+    </div>
+
+    <script>
+        const app = firebase.app();
+        const auth = firebase.auth(app);
+
+        // অথেন্টিকেশন চেক
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = "index.html";
+        });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Gold Price</title>
