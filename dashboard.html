@@ -1,27 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <!-- Same Firebase and Tailwind Configuration -->
+    <title>CG Bazar Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- নেভিগেশন বার -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">CG Bazar</h1>
+            <div class="space-x-6">
+                <a href="dashboard.html" class="hover:text-blue-200">Home</a>
+                <a href="page1.html" class="hover:text-blue-200">Page 1</a>
+                <a href="page2.html" class="hover:text-blue-200">Page 2</a>
+                <a href="page3.html" class="hover:text-blue-200">Page 3</a>
+                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- মূল কন্টেন্ট -->
+    <div class="container mx-auto mt-8 p-4">
+        <h2 class="text-3xl font-bold mb-6">Welcome to Dashboard</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <a href="page1.html" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold mb-3">Page 1</h3>
+                <p class="text-gray-600">Page 1 Description</p>
+            </a>
+            <!-- Page 2 & 3 একই স্ট্রাকচার -->
+        </div>
+    </div>
+
     <script>
-        // Firebase Initialization
         const app = firebase.app();
         const auth = firebase.auth(app);
 
-        // Auth State Listener
+        // অথেন্টিকেশন চেক
         auth.onAuthStateChanged(user => {
             if (!user) window.location.href = "index.html";
         });
 
-        // Logout Function
         function logout() {
             auth.signOut().then(() => {
                 window.location.href = "index.html";
             });
         }
     </script>
-</head>
-<body>
-    <!-- Your Dashboard Content Here -->
-    <button onclick="logout()" class="bg-red-500 p-3 text-white">Logout</button>
 </body>
 </html>
