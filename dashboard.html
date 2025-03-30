@@ -35,11 +35,18 @@
         }
         .gold-table tr:nth-child(even) { background-color: #222; }
         .highlight { font-weight: bold; color: #ffcc00; }
-        #timestampBDT, #additionalTimestampBDT, #marketTimestamp {
+        .timestamp {
             margin-top: 10px;
             font-size: 16px;
             font-weight: bold;
             color: red;
+        }
+        
+        /* বিশেষ সারির স্টাইল */
+        tr.special-row td {
+            background-color: #ffcc00 !important;
+            color: #000 !important;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -78,7 +85,7 @@
                     <tr><td colspan="3">লোড হচ্ছে...</td></tr>
                 </tbody>
             </table>
-            <p id="timestampBDT"></p>
+            <p id="timestampBDT" class="timestamp"></p>
         </div>
 
         <!-- দ্বিতীয় টেবিল -->
@@ -95,7 +102,7 @@
                     <tr><td colspan="3">লোড হচ্ছে...</td></tr>
                 </tbody>
             </table>
-            <p id="additionalTimestampBDT"></p>
+            <p id="additionalTimestampBDT" class="timestamp"></p>
         </div>
 
         <!-- তৃতীয় টেবিল (চারিগ্রাম জুয়েলারী) -->
@@ -112,7 +119,7 @@
                     <tr><td colspan="3">লোড হচ্ছে...</td></tr>
                 </tbody>
             </table>
-            <p id="marketTimestamp"></p>
+            <p id="marketTimestamp" class="timestamp"></p>
         </div>
     </div>
 
@@ -199,7 +206,7 @@
                 `;
 
                 document.getElementById("timestampBDT").innerHTML = 
-                    `সর্বশেষ আপডেট: <span style="font-weight: bold; color: red;">${lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim()}</span>`;
+                    `সর্বশেষ আপডেট: <span style="color: red;">${lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim()}</span>`;
 
                 // দ্বিতীয় টেবিলের ডেটা প্রসেসিং
                 let additionalTable = document.getElementById("additionalGoldTableBDT");
@@ -230,7 +237,7 @@
                 // দ্বিতীয় টেবিলের টাইমস্ট্যাম্প
                 let additionalTimestamp = (rows[7]?.[0] || "") + " " + (rows[8]?.[0] || "");
                 document.getElementById("additionalTimestampBDT").innerHTML = 
-                    `সর্বশেষ আপডেট: <span style="font-weight: bold; color: red;">${additionalTimestamp.trim()}</span>`;
+                    `সর্বশেষ আপডেট: <span style="color: red;">${additionalTimestamp.trim()}</span>`;
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -263,13 +270,13 @@
                 for (let i = 0; i < rows.length; i++) {
                     if (rows[i].length >= 3 && !rows[i][0].includes("Last Updated")) {
                         const category = rows[i][0].trim();
-                        const rowClass = ["স্বর্ণ", "পুরাতন স্বর্ণ", "রুপা"].includes(category) ? "highlight" : "";
+                        const isSpecial = ["স্বর্ণ", "পুরাতন স্বর্ণ", "রুপা"].includes(category);
 
                         tableBody += `
-                            <tr>
-                                <td class="${rowClass}">${rows[i][0]}</td>
-                                <td class="${rowClass}">${rows[i][1]}</td>
-                                <td class="${rowClass}">${rows[i][2]}</td>
+                            <tr ${isSpecial ? 'class="special-row"' : ''}>
+                                <td>${category}</td>
+                                <td>${rows[i][1]}</td>
+                                <td>${rows[i][2]}</td>
                             </tr>
                         `;
                     }
