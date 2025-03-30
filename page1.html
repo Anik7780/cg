@@ -62,23 +62,51 @@
     </style>
 </head>
 <body>
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">CG Bazar</h1>
-            <div class="space-x-6">
-                <a href="dashboard.html" class="hover:text-blue-200">হোম</a>
-                <a href="page1.html" class="hover:text-blue-200">স্বর্ণের দাম</a>
-                <a href="page2.html" class="hover:text-blue-200">পেজ ২</a>
-                <a href="page3.html" class="hover:text-blue-200">পেজ ৩</a>
-                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
-                    লগআউট
-                </button>
-            </div>
-        </div>
-    </nav>
     <div class="custom-heading">Live Kitco Gold</div> 
     <div class="iframe-container">
         <iframe src="https://www.kitco.com/charts/gold" scrolling="no"></iframe>
     </div>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            authDomain: "cgbazar-a40c0.firebaseapp.com",
+            projectId: "cgbazar-a40c0",
+            storageBucket: "cgbazar-a40c0.firebasestorage.app",
+            messagingSenderId: "33145540262",
+            appId: "1:33145540262:web:2820f803fb1548458f6e67",
+            measurementId: "G-96NYF34CWB"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(app);
+
+        // Logout Function
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = "index.html";
+            });
+        }
+
+        // Responsive Adjustment
+        function adjustIframe() {
+            const iframe = document.querySelector('.responsive-iframe');
+            const screenWidth = window.innerWidth;
+            
+            if(screenWidth < 768) {
+                iframe.style.transform = 'scale(1.8) translate(-28%, -15%)';
+            } else if(screenWidth > 1200) {
+                iframe.style.transform = 'scale(1.1) translate(-10%, -10%)';
+            } else {
+                iframe.style.transform = 'scale(1.4) translate(-20%, -20%)';
+            }
+        }
+
+        // Event Listeners
+        window.addEventListener('resize', adjustIframe);
+        window.addEventListener('load', adjustIframe);
+    </script>
 </body>
 </html>
+  ei code same to same rekhe abar full code make koro
