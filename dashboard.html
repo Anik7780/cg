@@ -124,7 +124,26 @@
             <p id="marketTimestamp" class="timestamp"></p>
         </div>
     </div>
+<!-- dashboard.html ফাইলে -->
+<script>
+    // Firebase Configuration (index.html-এর মতো একই)
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+        // বাকি কনফিগারেশন
+    };
 
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth(app);
+
+    // প্রটেকশন চেক
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            // লগিন না থাকলে লগিন পেজে পাঠান
+            window.location.href = "index.html";
+        }
+    });
+</script>
     <script>
         // Firebase Configuration
         const firebaseConfig = {
