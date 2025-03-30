@@ -62,9 +62,29 @@
     </style>
 </head>
 <body>
-    <div class="custom-heading">Live Kitco Gold</div> 
-    <div class="iframe-container">
-        <iframe src="https://www.kitco.com/charts/gold" scrolling="no"></iframe>
+   <body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4 fixed w-full top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">CG Bazar</h1>
+            <div class="space-x-4">
+                <a href="dashboard.html" class="hover:text-blue-200">হোম</a>
+                <a href="page1.html" class="hover:text-blue-200 border-b-2">স্বর্ণের দাম</a>
+                <a href="page2.html" class="hover:text-blue-200">পেজ ২</a>
+                <a href="page3.html" class="hover:text-blue-200">পেজ ৩</a>
+                <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
+                    লগআউট
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="iframe-wrapper">
+        <iframe 
+            src="https://www.kitco.com/charts/gold" 
+            class="responsive-iframe"
+            scrolling="no"
+            loading="lazy"
+        ></iframe>
     </div>
     <script>
         // Firebase Configuration
