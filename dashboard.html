@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CG Bazar Dashboard</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
@@ -41,8 +43,6 @@
             font-weight: bold;
             color: red;
         }
-        
-        /* বিশেষ সারির স্টাইল */
         tr.special-row td {
             background-color: #ffcc00 !important;
             color: #000 !important;
@@ -68,8 +68,8 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto mt-8 p-4">
-        <h1 class="text-3xl font-bold text-center mb-8">ঢাকার স্বর্ণের বাজার এর মূল্য তালিকা </h1>
+    <div class="main-container mx-auto mt-8 p-4">
+        <h1 class="text-3xl font-bold text-center mb-8">ঢাকার স্বর্ণের বাজার এর মূল্য তালিকা</h1>
         
         <!-- প্রথম টেবিল -->
         <div class="gold-table">
@@ -105,16 +105,15 @@
             <p id="additionalTimestampBDT" class="timestamp"></p>
         </div>
 
-        <!-- তৃতীয় টেবিল (চারিগ্রাম জুয়েলারী) -->
-         <div class="container mx-auto mt-8 p-4">
-        <h1 class="text-3xl font-bold text-center mb-8">চারিগ্রাম জুয়েলারী বাজার দর </h1>
-        
+        <!-- তৃতীয় টেবিল -->
+        <h1 class="text-3xl font-bold text-center mb-8 mt-12">চারিগ্রাম জুয়েলারী বাজার দর</h1>
         <div class="gold-table">
             <table id="marketTable">
                 <thead>
                     <tr>
-                
-  
+                        <th>ধরণ</th>
+                        <th>বিবরণ</th>
+                        <th>মূল্য</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,26 +123,8 @@
             <p id="marketTimestamp" class="timestamp"></p>
         </div>
     </div>
-<!-- dashboard.html ফাইলে -->
-<script>
-    // Firebase Configuration (index.html-এর মতো একই)
-    const firebaseConfig = {
-        apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
-        // বাকি কনফিগারেশন
-    };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth(app);
-
-    // প্রটেকশন চেক
-    auth.onAuthStateChanged(user => {
-        if (!user) {
-            // লগিন না থাকলে লগিন পেজে পাঠান
-            window.location.href = "index.html";
-        }
-    });
-</script>
+    <!-- সমস্ত স্ক্রিপ্ট বডির শেষে -->
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -153,11 +134,12 @@
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
             messagingSenderId: "33145540262",
             appId: "1:33145540262:web:2820f803fb1548458f6e67",
+            measurementId: "G-96NYF34CWB"
         };
 
-        // Initialize Firebase
+        // Firebase Initialization (একবারই ইনিশিয়ালাইজ করুন)
         const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        const auth = firebase.auth(app);
 
         // Authentication Check
         auth.onAuthStateChanged(user => {
@@ -264,8 +246,6 @@
                 console.error("Error fetching data:", error);
                 document.getElementById("goldTableBDT").innerHTML = 
                     `<tr><td colspan="3">⚠️ আপডেট করতে সমস্যা হয়েছে!</td></tr>`;
-                document.getElementById("additionalGoldTableBDT").innerHTML = 
-                    `<tr><td colspan="3">⚠️ আপডেট করতে সমস্যা হয়েছে!</td></tr>`;
             }
         }
 
@@ -314,13 +294,13 @@
             }
         }
 
-        // Initial fetch and setup
+        // Initial Load
         fetchGoldPrice();
         fetchMarketRates();
         setInterval(() => {
             fetchGoldPrice();
             fetchMarketRates();
-        }, 60000);
+        }, 300000); // 5 মিনিট পর আপডেট
     </script>
 </body>
 </html>
