@@ -6,7 +6,7 @@
     <title>CG Bazar - Auth</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK (compat version for easier implementation) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <!-- Signup Form (Hidden by default) -->
+        <!-- Signup Form -->
         <div id="signupForm" class="hidden">
             <h2 class="text-2xl font-bold mb-6 text-center">Create Account</h2>
             <div class="mb-4">
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <!-- Forgot Password Form (Hidden by default) -->
+        <!-- Forgot Password Form -->
         <div id="forgotPasswordForm" class="hidden">
             <h2 class="text-2xl font-bold mb-6 text-center">Reset Password</h2>
             <div class="mb-4">
@@ -78,20 +78,14 @@
             measurementId: "G-96NYF34CWB"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase (একবারই করুন)
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
-        // index.html এর script ব্লকে
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth(app);
 
-// ✅ এই কোডটি যোগ করুন
-auth.onAuthStateChanged(user => {
-    if (user) {
-        // ইউজার লগিন থাকলে ড্যাশবোর্ডে রিডাইরেক্ট
-        window.location.href = "dashboard.html";
-    }
-});
+        // Auth State Observer (সংশোধিত)
+        auth.onAuthStateChanged(user => {
+            if (user) window.location.href = "dashboard.html";
+        });
 
         // Form Toggle Function
         function toggleForm(formId) {
@@ -100,49 +94,51 @@ auth.onAuthStateChanged(user => {
             });
         }
 
-        // Login Function
-        function loginUser() {
+        // Login Function (সংশোধিত)
+        async function loginUser() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
 
-            auth.setPersistence(rememberMe ? 
-                firebase.auth.Auth.Persistence.LOCAL : 
-                firebase.auth.Auth.Persistence.SESSION
-            ).then(() => {
-                return auth.signInWithEmailAndPassword(email, password);
-            }).then(() => {
+            try {
+                await auth.setPersistence(
+                    rememberMe ? 
+                    firebase.auth.Auth.Persistence.LOCAL : 
+                    firebase.auth.Auth.Persistence.SESSION
+                );
+                
+                await auth.signInWithEmailAndPassword(email, password);
                 window.location.href = "dashboard.html";
-            }).catch(error => {
+            } catch (error) {
                 alert(`Login Failed: ${error.message}`);
-            });
+            }
         }
 
         // Signup Function
-        function signupUser() {
+        async function signupUser() {
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
 
-            auth.createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                alert('Account created successfully! Please login.');
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                alert('Account created! Please login.');
                 toggleForm('loginForm');
-            }).catch(error => {
+            } catch (error) {
                 alert(`Signup Failed: ${error.message}`);
-            });
+            }
         }
 
         // Password Reset Function
-        function sendPasswordReset() {
+        async function sendPasswordReset() {
             const email = document.getElementById('resetEmail').value;
             
-            auth.sendPasswordResetEmail(email)
-            .then(() => {
-                alert('Password reset email sent! Check your inbox.');
+            try {
+                await auth.sendPasswordResetEmail(email);
+                alert('Password reset email sent!');
                 toggleForm('loginForm');
-            }).catch(error => {
+            } catch (error) {
                 alert(`Error: ${error.message}`);
-            });
+            }
         }
     </script>
 </body>
