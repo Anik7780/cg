@@ -64,7 +64,7 @@
     <div class="container mx-auto mt-8 p-4">
         <h1 class="text-3xl font-bold text-center mb-8">ঢাকার স্বর্ণের বাজার এর মূল্য তালিকা </h1>
         
-        <!-- Existing Tables -->
+        <!-- Existing Gold Tables -->
         <div class="gold-table">
             <table>
                 <thead>
@@ -97,7 +97,7 @@
             <p id="additionalTimestampBDT" class="timestamp"></p>
         </div>
 
-        <!-- New Additional Tables -->
+        <!-- New Market Rate Tables -->
         <div class="gold-table">
             <h2 class="text-white text-center text-xl mb-4">চারিগ্রাম জুয়েলারী বাজার দর</h2>
             <table id="marketTable">
@@ -134,7 +134,7 @@
     </div>
 
     <script>
-        // Firebase Configuration and Initialization
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
             authDomain: "cgbazar-a40c0.firebaseapp.com",
@@ -144,6 +144,7 @@
             appId: "1:33145540262:web:2820f803fb1548458f6e67"
         };
 
+        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
@@ -159,39 +160,121 @@
             });
         }
 
-        // Original Gold Price Fetching
+        // Fetch Gold Prices from Sheet 1
         async function fetchGoldPrice() {
             const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqWaPbAYkUS5jLUJtBQBS4uD14-F0Fipp15yJboAtvf6gdHH_aKMQKQuw4RYjHnSOCkONBYxUNWviU/pub?output=csv";
             try {
                 let response = await fetch(sheetUrl);
                 if (!response.ok) throw new Error("ডেটা লোড করতে সমস্যা!");
-                // ... (existing implementation remains same)
+                let csvText = await response.text();
+                let rows = csvText.split("\n").map(row => row.split(","));
+                
+                // Process First Table
+                let basePricePerVori = parseFloat(rows[0][1]);
+                let lastUpdatedRaw = rows[0][2];
+                let updatedGoldPricePerVori = Math.round(basePricePerVori * 1.05);
+                let goldPricePerGram = Math.round(updatedGoldPricePerVori / 11.66);
+
+                document.getElementById("goldTableBDT").innerHTML = `
+                    <tr>
+                        <td rowspan="3">২৪ ক্যারেট</td>
+                        <td>প্রতি ভরি বিস্কুট (99.99%)</td>
+                        <td class="highlight">৳${updatedGoldPricePerVori}</td>
+                    </tr>
+                    <tr>
+                        <td>প্রতি ভরি পাকা স্বর্ণ (99.50%)</td>
+                        <td>৳${Math.round(updatedGoldPricePerVori * 0.995)}</td>
+                    </tr>
+                    <tr>
+                        <td>প্রতি গ্রাম বিস্কুট (99.99%)</td>
+                        <td>৳${goldPricePerGram}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">পুরাতন গহনা ক্রয় বিক্রয়</th>
+                    </tr>
+                    <tr>
+                        <td>২২ ক্যারেট</td>
+                        <td>প্রতি ভরি গহনা (91.67%)</td>
+                        <td>৳${Math.round(updatedGoldPricePerVori * 0.9167)}</td>
+                    </tr>
+                    <tr>
+                        <td>২১ ক্যারেট</td>
+                        <td>প্রতি ভরি গহনা (87.50%)</td>
+                        <td>৳${Math.round(updatedGoldPricePerVori * 0.875)}</td>
+                    </tr>
+                    <tr>
+                        <td>২২ ক্যারেট</td>
+                        <td>প্রতি গ্রাম গহনা (91.67%)</td>
+                        <td>৳${Math.round((updatedGoldPricePerVori / 11.66) * 0.9167)}</td>
+                    </tr>
+                    <tr>
+                        <td>২১ ক্যারেট</td>
+                        <td>প্রতি গ্রাম গহনা (87.50%)</td>
+                        <td>৳${Math.round((updatedGoldPricePerVori / 11.66) * 0.875)}</td>
+                    </tr>
+                `;
+
+                document.getElementById("timestampBDT").innerHTML = 
+                    `সর্বশেষ আপডেট: <span style="color: red;">${lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim()}</span>`;
+
+                // Process Second Table
+                let additionalTable = document.getElementById("additionalGoldTableBDT");
+                additionalTable.innerHTML = "";
+                
+                for (let i = 3; i <= 6; i++) {
+                    let rowData = rows[i];
+                    if (!rowData || rowData.length < 3) continue;
+
+                    additionalTable.innerHTML += `
+                    <tr>
+                        <td>${rowData[0].trim()}</td>
+                        <td>${rowData[1].trim()}</td>
+                        <td class="highlight">৳${rowData[2].trim()}</td>
+                    </tr>`;
+                }
+
+                document.getElementById("additionalTimestampBDT").innerHTML = 
+                    `সর্বশেষ আপডেট: <span style="color: red;">${rows[7][0]} ${rows[8][0]}</span>`;
+
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching gold data:", error);
                 document.getElementById("goldTableBDT").innerHTML = 
                     `<tr><td colspan="3">⚠️ আপডেট করতে সমস্যা হয়েছে!</td></tr>`;
             }
         }
 
-        // New Market Rates Fetching
+        // Fetch Market Rates from Sheet 2
         async function fetchMarketRates() {
             const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQZHciJ3vmBxMds7ohHyTt8HLHBtjLFanV81BAsFVXRudIdN5Wi3jchbsr12hivpNp3orH8g2VrEN8/pub?output=csv";
             try {
-                const response = await fetch(sheetUrl);
-                const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
-                
-                // Process and populate marketTable
-                let marketTableHTML = '';
-                // Add your data processing logic here
-                document.getElementById("marketTable").getElementsByTagName('tbody')[0].innerHTML = marketTableHTML;
-                document.getElementById("marketTimestamp").textContent = `সর্বশেষ আপডেট: ${new Date().toLocaleString()}`;
+                let response = await fetch(sheetUrl);
+                if (!response.ok) throw new Error("ডেটা লোড করতে সমস্যা!");
+                let csvText = await response.text();
+                let rows = csvText.split("\n").map(row => row.split(","));
 
-                // Process and populate additionalMarketTable
-                let additionalMarketTableHTML = '';
-                // Add additional data processing logic here
-                document.getElementById("additionalMarketTable").getElementsByTagName('tbody')[0].innerHTML = additionalMarketTableHTML;
-                document.getElementById("additionalMarketTimestamp").textContent = `সর্বশেষ আপডেট: ${new Date().toLocaleString()}`;
+                // Process Market Table
+                let marketTableHTML = '';
+                for(let i=0; i<rows.length; i++) {
+                    if(rows[i].length >=3 && !rows[i][0].includes("Last Updated")) {
+                        marketTableHTML += `
+                            <tr>
+                                <td>${rows[i][0]}</td>
+                                <td>${rows[i][1]}</td>
+                                <td class="highlight">${rows[i][2]}</td>
+                            </tr>
+                        `;
+                    }
+                }
+                document.getElementById("marketTable").getElementsByTagName('tbody')[0].innerHTML = marketTableHTML;
+                document.getElementById("marketTimestamp").innerHTML = 
+                    `সর্বশেষ আপডেট: <span style="color: red;">${new Date().toLocaleString()}</span>`;
+
+                // Process Additional Market Table
+                let additionalMarketHTML = '';
+                // Add your custom processing logic here
+                document.getElementById("additionalMarketTable").getElementsByTagName('tbody')[0].innerHTML = additionalMarketHTML;
+                document.getElementById("additionalMarketTimestamp").innerHTML = 
+                    `সর্বশেষ আপডেট: <span style="color: red;">${new Date().toLocaleString()}</span>`;
 
             } catch (error) {
                 console.error("Error fetching market data:", error);
