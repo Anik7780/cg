@@ -1,53 +1,67 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CG Bazar - স্বর্ণের দাম</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kitco Gold Live</title>
     <style>
-        .table-container {
-            width: 90%;
-            max-width: 600px;
-            margin: 1rem auto;
-            background: #000;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #fff;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             text-align: center;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
         }
-        th {
-            background-color: #ffcc00;
-            color: #000;
-            font-size: 18px;
+        .iframe-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
         }
-        tr:nth-child(even) { background-color: #222; }
-        .highlight { 
-            font-weight: bold; 
-            color: #ffcc00 !important; 
+        .iframe-container iframe {
+            position: absolute;
+            top: -1500px;  /* Adjust to show specific area */
+            left: -140px;
+            width: 1500px;  /* Original size for zoom */
+            height: 1000px;
+            border: none;
+            transform: scale(2.5);  /* Zoom */
+            transform-origin: top left;
         }
-        #timestampBDT {
-            margin-top: 10px;
-            font-size: 16px;
+        .custom-heading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #FFD700;
+            color: black;
             font-weight: bold;
-            color: red;
+            text-align: center;
+            padding: 16px;
+            z-index: 10;
+            font-size: 20px;
+        }
+
+        /* Mobile View Fix */
+        @media (max-width: 768px) {
+            .iframe-container iframe {
+                top: -815px;  /* Adjust crop for mobile */
+                left: -194px;
+                width: 1200px; /* Adjust width for mobile */
+                height: 1200px; /* Adjust height for mobile */
+                transform: scale(1.4);  /* Zoom in to crop properly */
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <!-- নেভিগেশন বার -->
+<body>
     <nav class="bg-blue-600 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold">CG Bazar</h1>
@@ -62,118 +76,9 @@
             </div>
         </div>
     </nav>
-
-    <!-- মূল কন্টেন্ট -->
-    <div class="container mx-auto mt-8 p-4">
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">লাইভ স্বর্ণের দাম (BDT)</h1>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>স্বর্ণ</th>
-                        <th>বিবরণ</th>
-                        <th>মূল্য (BDT)</th>
-                    </tr>
-                </thead>
-                <tbody id="goldTableBDT">
-                    <tr><td colspan="3">লোড হচ্ছে...</td></tr>
-                </tbody>
-            </table>
-            <p id="timestampBDT"></p>
-        </div>
+    <div class="custom-heading">Live Kitco Gold</div> 
+    <div class="iframe-container">
+        <iframe src="https://www.kitco.com/charts/gold" scrolling="no"></iframe>
     </div>
-
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
-            authDomain: "cgbazar-a40c0.firebaseapp.com",
-            projectId: "cgbazar-a40c0",
-            storageBucket: "cgbazar-a40c0.firebasestorage.app",
-            messagingSenderId: "33145540262",
-            appId: "1:33145540262:web:2820f803fb1548458f6e67",
-        
-        };
-
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(app);
-
-        // অথেন্টিকেশন চেক
-        auth.onAuthStateChanged(user => {
-            if (!user) window.location.href = "index.html";
-        });
-
-        function logout() {
-            auth.signOut().then(() => {
-                window.location.href = "index.html";
-            });
-        }
-
-        // Gold Price Fetching Logic
-        async function fetchGoldPrice() {
-            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqWaPbAYkUS5jLUJtBQBS4uD14-F0Fipp15yJboAtvf6gdHH_aKMQKQuw4RYjHnSOCkONBYxUNWviU/pub?output=csv";
-            try {
-                let response = await fetch(sheetUrl);
-                if (!response.ok) throw new Error("ডেটা লোড করতে সমস্যা!");
-                
-                let csvText = await response.text();
-                let rows = csvText.split("\n").map(row => row.split(","));
-                let basePricePerVori = parseFloat(rows[0][1]);
-                let lastUpdatedRaw = rows[0][2];
-
-                let updatedGoldPricePerVori = Math.round(basePricePerVori * 1.05);
-                let goldPricePerGram = Math.round(updatedGoldPricePerVori / 11.66);
-
-                let lastUpdatedFormatted = lastUpdatedRaw.replace("সর্বশেষ আপডেট:", "").trim();
-
-                document.getElementById("goldTableBDT").innerHTML = `
-                    <tr>
-                        <td rowspan="3">২৪ ক্যারেট</td>
-                        <td>প্রতি ভরি বিস্কুট (99.99%)</td>
-                        <td class="highlight">৳${updatedGoldPricePerVori}</td>
-                    </tr>
-                    <tr>
-                        <td>প্রতি ভরি পাকা স্বর্ণ (99.50%)</td>
-                        <td>৳${Math.round(updatedGoldPricePerVori * 0.995)}</td>
-                    </tr>
-                    <tr>
-                        <td>প্রতি গ্রাম বিস্কুট (99.99%)</td>
-                        <td>৳${Math.round(goldPricePerGram * 1.05)}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="3">রৌপ্য গহনা বিক্রয়</th>
-                    </tr>
-                    <tr>
-                        <td>২২ ক্যারেট</td>
-                        <td>প্রতি ভরি গহনা (91.67%)</td>
-                        <td>৳${Math.round(updatedGoldPricePerVori * 0.9167)}</td>
-                    </tr>
-                    <tr>
-                        <td>২১ ক্যারেট</td>
-                        <td>প্রতি ভরি গহনা (87.50%)</td>
-                        <td>৳${Math.round(updatedGoldPricePerVori * 0.875)}</td>
-                    </tr>
-                    <tr>
-                        <td>২২ ক্যারেট</td>
-                        <td>প্রতি গ্রাম গহনা (91.67%)</td>
-                        <td>৳${Math.round((updatedGoldPricePerVori / 11.66) * 0.9167)}</td>
-                    </tr>
-                    <tr>
-                        <td>২১ ক্যারেট</td>
-                        <td>প্রতি গ্রাম গহনা (87.50%)</td>
-                        <td>৳${Math.round((updatedGoldPricePerVori / 11.66) * 0.875)}</td>
-                    </tr>
-                `;
-
-                document.getElementById("timestampBDT").innerHTML = `সর্বশেষ আপডেট: <span style="color: #ffcc00;">${lastUpdatedFormatted}</span>`;
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById("goldTableBDT").innerHTML = `<tr><td colspan="3">⚠️ ডেটা লোড করতে ব্যর্থ!</td></tr>`;
-            }
-        }
-
-        fetchGoldPrice();
-        setInterval(fetchGoldPrice, 60000);
-    </script>
 </body>
 </html>
