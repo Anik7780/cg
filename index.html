@@ -81,6 +81,17 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
+        // index.html এর script ব্লকে
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth(app);
+
+// ✅ এই কোডটি যোগ করুন
+auth.onAuthStateChanged(user => {
+    if (user) {
+        // ইউজার লগিন থাকলে ড্যাশবোর্ডে রিডাইরেক্ট
+        window.location.href = "dashboard.html";
+    }
+});
 
         // Form Toggle Function
         function toggleForm(formId) {
