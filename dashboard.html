@@ -143,12 +143,10 @@
                 let goldPricePerGram = Math.round(updatedGoldPricePerVori / 11.66);
 
                 document.getElementById("goldTableBDT").innerHTML = `
-                    <tr>
-                        <td rowspan="3">২৪ ক্যারেট</td>
-                        <td>প্রতি ভরি বিস্কুট (99.99%)</td>
-                        <td class="highlight">৳${updatedGoldPricePerVori}</td>
-                    </tr>
-                    <tr>
+                   <tr>
+    <td>প্রতি গ্রাম বিস্কুট (99.99%)</td>
+    <td>৳${Math.round(goldPricePerGram)}</td>
+</tr>
                         <td>প্রতি ভরি পাকা স্বর্ণ (99.50%)</td>
                         <td>৳${Math.round(updatedGoldPricePerVori * 0.995)}</td>
                     </tr>
