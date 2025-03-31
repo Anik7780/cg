@@ -47,6 +47,61 @@
                 transform: scale(1.2) translate(-15%, -12%);
             }
         }
+
+           /* Text Styling */
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            color: #444;
+        }
+        p {
+            line-height: 1.8;
+            color: #666;
+        }
+        .highlight {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        /* Button Styling */
+        .download, .contact {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .download a, .contact a {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .download a:hover, .contact a:hover {
+            background: #0056b3;
+        }
+
+        /* Live Price Notification */
+        .live-price-off {
+            text-align: center;
+            margin-top: 20px;
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -95,10 +150,13 @@
     </div>
  
 
+   <!-- Firebase Logout Script -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script>
-        // Firebase কনফিগারেশন
+        // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8", // ❌ এটা Public না রাখাই ভালো!
             authDomain: "cgbazar-a40c0.firebaseapp.com",
             projectId: "cgbazar-a40c0",
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
@@ -107,42 +165,34 @@
             measurementId: "G-96NYF34CWB"
         };
 
-        // Firebase ইনিশিয়ালাইজেশন
+        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
 
-        // লিংক ম্যানেজমেন্ট
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = link.getAttribute('href');
-            });
+        // Authentication Check
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = "index.html";
         });
 
-        // লগআউট ফাংশন
+        // Logout Function
         function logout() {
             auth.signOut().then(() => {
                 window.location.href = "index.html";
             });
         }
 
-        // রেস্পন্সিভ এডজাস্টমেন্ট
-        function adjustIframe() {
-            const iframe = document.querySelector('.responsive-iframe');
-            const screenWidth = window.innerWidth;
+        // Check if today is Saturday or Sunday
+        function checkWeekend() {
+            const today = new Date();
+            const day = today.getDay(); // 0 = Sunday, 6 = Saturday
             
-            if(screenWidth < 768) {
-                iframe.style.transform = 'scale(1.8) translate(-28%, -15%)';
-            } else if(screenWidth > 1200) {
-                iframe.style.transform = 'scale(1.1) translate(-10%, -10%)';
-            } else {
-                iframe.style.transform = 'scale(1.4) translate(-20%, -20%)';
+            if (day === 0 || day === 6) {
+                document.getElementById("livePriceOff").style.display = "block";
             }
         }
-
-        // ইভেন্ট লিসেনার
-        window.addEventListener('resize', adjustIframe);
-        window.addEventListener('load', adjustIframe);
+        
+        checkWeekend();
     </script>
+
 </body>
 </html>
