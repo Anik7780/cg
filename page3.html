@@ -2,142 +2,76 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>সোনার দাম আপডেট নীতিমালা</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>নীতিমালা</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-     <style>
-        /* General Reset */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .iframe-wrapper {
+            position: fixed;
+            top: -200px;
+            left: 1;
+            right: 200;
+            bottom: 0;
+            overflow: hidden;
         }
 
-        /* Container Styling (White Background Removed) */
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background: transparent; /* 🔥 Background Transparent */
-            margin: 20px auto;
-            padding: 20px;
-            box-shadow: none; /* 🔥 Shadow Remove */
-            border-radius: 8px;
+        .responsive-iframe {
+            width: 100%;
+            height: 100%;
+            transform: scale(1.4) translate(-20%, -15%);
+            transform-origin: top left;
+            border: none;
         }
 
-        /* Text Styling */
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        h2 {
-            color: #444;
-        }
-        p {
-            line-height: 1.8;
-            color: #666;
-        }
-        .highlight {
-            color: #d9534f;
-            font-weight: bold;
+        @media (max-width: 768px) {
+            .iframe-wrapper {
+                top: -250px;
+            }
+            .responsive-iframe {
+                transform: scale(1.8) translate(-15%, 15%);
+            }
         }
 
-        /* Button Styling */
-        .download, .contact {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .download a, .contact a {
-            display: inline-block;
-            background: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        .download a:hover, .contact a:hover {
-            background: #0056b3;
-        }
-
-        /* Live Price Notification */
-        .live-price-off {
-            text-align: center;
-            margin-top: 20px;
-            background-color: #f44336;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            display: none;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
+        @media (min-width: 1200px) {
+            .responsive-iframe {
+                transform: scale(1.2) translate(-15%, -12%);
+            }
         }
     </style>
 </head>
-<body>
-
-    <!-- Navigation Bar -->
-   <nav class="bg-blue-600 text-white p-4 fixed w-full top-0 z-50">
+<body class="bg-gray-100">
+    <!-- নেভিগেশন বার -->
+    <nav class="bg-blue-600 text-white p-4 fixed w-full top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold">CG Bazar</h1>
             <div class="space-x-4">
-                <a href="dashboard.html" class="hover:text-blue-200">স্বর্ণের দাম</a>
-                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
+                <a href="dashboard.html" class="hover:text-blue-200">বর্ণের দাম</a>
+                <a href="page1.html" class="hover:text-blue-200 border-b-2">kitco Live</a>
                 
                 <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
-                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
                     লগআউট
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h1>সোনার দাম আপডেট নীতিমালা</h1>
-        <p><strong>কার্যকর তারিখ:</strong> [আপনার তারিখ]</p>
+    
 
-        <h2>🔹 দাম আপডেট সময়সূচি</h2>
-        <p>আমরা প্রতিদিন **<span class="highlight">সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা</span>** পর্যন্ত **<span class="highlight">৫ থেকে ৮ বার</span>** নতুন সোনার দাম আপডেট করি।</p>
-        <p><span class="highlight">**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</span></p>
-
-        <h2>🔹 আইন ও নীতিমালা</h2>
-        <p>আমরা **বাংলাদেশের আইন ও <span class="highlight">বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS)</span>** এর নীতিমালা অনুসরণ করে সোনার দাম আপডেট করি।</p>
-
-        <h2>🔹 দায়িত্ব অস্বীকার</h2>
-        <p>এই ওয়েবসাইটে প্রদত্ত **সোনার দাম শুধুমাত্র তথ্যের জন্য**। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</p>
-
-        <div class="download">
-            <a href="#">📲 আমাদের অ্যাপ ডাউনলোড করুন</a>
-        </div>
-
-        <div class="contact">
-            <a href="https://wa.me/8801630249778">📞 WhatsApp: 01630249778</a>
-        </div>
-
-        <!-- Gold Price Off Notification -->
-        <div id="livePriceOff" class="live-price-off">
-            🚨 **আজ আন্তর্জাতিক বাজার বন্ধ, সোনার লাইভ দাম আপডেট বন্ধ রয়েছে। আনুমানিক মূল্য আপডেট হতে পারে।** 🚨
-        </div>
-    </div>
-
-    <!-- Firebase Logout Script -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script>
-        // Firebase Configuration
+        // Firebase কনফিগারেশন
         const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8", // ❌ এটা Public না রাখাই ভালো!
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
             authDomain: "cgbazar-a40c0.firebaseapp.com",
             projectId: "cgbazar-a40c0",
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
@@ -146,34 +80,42 @@
             measurementId: "G-96NYF34CWB"
         };
 
-        // Initialize Firebase
+        // Firebase ইনিশিয়ালাইজেশন
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
 
-        // Authentication Check
-        auth.onAuthStateChanged(user => {
-            if (!user) window.location.href = "index.html";
+        // লিংক ম্যানেজমেন্ট
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = link.getAttribute('href');
+            });
         });
 
-        // Logout Function
+        // লগআউট ফাংশন
         function logout() {
             auth.signOut().then(() => {
                 window.location.href = "index.html";
             });
         }
 
-        // Check if today is Saturday or Sunday
-        function checkWeekend() {
-            const today = new Date();
-            const day = today.getDay(); // 0 = Sunday, 6 = Saturday
+        // রেস্পন্সিভ এডজাস্টমেন্ট
+        function adjustIframe() {
+            const iframe = document.querySelector('.responsive-iframe');
+            const screenWidth = window.innerWidth;
             
-            if (day === 0 || day === 6) {
-                document.getElementById("livePriceOff").style.display = "block";
+            if(screenWidth < 768) {
+                iframe.style.transform = 'scale(1.8) translate(-28%, -15%)';
+            } else if(screenWidth > 1200) {
+                iframe.style.transform = 'scale(1.1) translate(-10%, -10%)';
+            } else {
+                iframe.style.transform = 'scale(1.4) translate(-20%, -20%)';
             }
         }
-        
-        checkWeekend();
-    </script>
 
+        // ইভেন্ট লিসেনার
+        window.addEventListener('resize', adjustIframe);
+        window.addEventListener('load', adjustIframe);
+    </script>
 </body>
 </html>
