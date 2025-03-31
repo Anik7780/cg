@@ -247,15 +247,50 @@
             }
         }
 
-        // Market Rate Fetching
-        async function fetchMarketRates() {
-            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQZHciJ3vmBxMds7ohHyTt8HLHBtjLFanV81BAsFVXRudIdN5Wi3jchbsr12hivpNp3orH8g2VrEN8/pub?output=csv";
-            try {
-                const response = await fetch(sheetUrl);
-                const csvText = await response.text();
-                const rows = csvText.split("\n").map(row => row.split(","));
-                let tableBody = "";
-                let lastUpdated = "তথ্য পাওয়া যায়নি";
+        // Market Rate Fetching (সংশোধিত ভার্শন)
+async function fetchMarketRates() {
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQZHciJ3vmBxMds7ohHyTt8HLHBtjLFanV81BAsFVXRudIdN5Wi3jchbsr12hivpNp3orH8g2VrEN8/pub?output=csv";
+    try {
+        const response = await fetch(sheetUrl);
+        const csvText = await response.text();
+        const rows = csvText.split("\n").map(row => row.split(","));
+        let tableBody = "";
+        let lastUpdated = "তথ্য পাওয়া যায়নি";
+
+        // সময় আপডেট (বাংলা "সর্বশেষ আপডেট" খুঁজে)
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i] && rows[i][0]?.includes("সর্বশেষ আপডেট")) {
+                lastUpdated = rows[i][1]?.trim() || "তথ্য পাওয়া যায়নি";
+                break;
+            }
+        }
+
+        // টেবিল ডেটা প্রসেসিং
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].length >= 3 && !rows[i][0].includes("সর্বশেষ আপডেট")) {
+                const category = rows[i][0].trim();
+                const isSpecial = ["স্বর্ণ", "পুরাতন স্বর্ণ", "রুপা"].includes(category);
+
+                tableBody += `
+                    <tr ${isSpecial ? 'class="special-row"' : ''}>
+                        <td>${category}</td>
+                        <td>${rows[i][1]}</td>
+                        <td>${rows[i][2]}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        document.getElementById("marketTable").querySelector("tbody").innerHTML = tableBody;
+        document.getElementById("marketTimestamp").innerHTML = 
+            `সর্বশেষ আপডেট: <span style="color: red;">${lastUpdated}</span>`;
+
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("marketTable").querySelector("tbody").innerHTML = 
+            `<tr><td colspan="3">⚠️ ডাটা লোড করতে ব্যর্থ!</td></tr>`;
+    }
+}
 
                 // সময় আপডেট
                 for (let i = 14; i < 16; i++) {
