@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>সোনার দাম আপডেট নীতিমালা</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <.container {
-    background: none; /* সাদা ব্যাকগ্রাউন্ড রিমুভ */
-    box-shadow: none; /* শ্যাডো থাকলে এটাও সরিয়ে দিন */
-}
 
-        <body class="bg-transparent">
-
+    <style>
+        /* General Reset */
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
         }
+
+        /* Container Styling (White Background Removed) */
         .container {
             width: 90%;
             max-width: 800px;
-            background: white;
+            background: transparent; /* 🔥 Background Transparent */
             margin: 20px auto;
             padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* 🔥 Shadow Remove */
             border-radius: 8px;
         }
+
+        /* Text Styling */
         h1 {
             text-align: center;
             color: #333;
@@ -42,6 +44,8 @@
             color: #d9534f;
             font-weight: bold;
         }
+
+        /* Button Styling */
         .download, .contact {
             text-align: center;
             margin-top: 20px;
@@ -58,6 +62,8 @@
         .download a:hover, .contact a:hover {
             background: #0056b3;
         }
+
+        /* Live Price Notification */
         .live-price-off {
             text-align: center;
             margin-top: 20px;
@@ -70,6 +76,7 @@
             display: none;
             animation: blink 1.5s infinite;
         }
+
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0.6; }
@@ -130,7 +137,7 @@
     <script>
         // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            apiKey: "YOUR_FIREBASE_API_KEY", // ❌ এটা Public না রাখাই ভালো!
             authDomain: "cgbazar-a40c0.firebaseapp.com",
             projectId: "cgbazar-a40c0",
             storageBucket: "cgbazar-a40c0.firebasestorage.app",
