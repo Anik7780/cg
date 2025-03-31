@@ -10,64 +10,65 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
-
-        .container {
-    max-width: 800px; /* পেজের মাঝে সীমিত প্রস্থ */
-    margin: 60px auto; /* টপ থেকে 60px এবং horizontally center */
-
-    text-align: center; /* সব টেক্সট মাঝখানে */
-}
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        .iframe-wrapper {
+
+        /* Navigation Bar */
+        nav {
             position: fixed;
-            top: -200px;
-            left: 1;
-            right: 200;
-            bottom: 0;
-            overflow: hidden;
-        }
-
-        .responsive-iframe {
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            transform: scale(1.4) translate(-20%, -15%);
-            transform-origin: top left;
-            border: none;
+            background: #007bff;
+            color: white;
+            padding: 15px 0;
+            z-index: 50;
         }
 
-        @media (max-width: 768px) {
-            .iframe-wrapper {
-                top: -250px;
-            }
-            .responsive-iframe {
-                transform: scale(1.8) translate(-15%, 15%);
-            }
+        /* Content Centering */
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 80px; /* Navbar এর নিচে ঠিক জায়গায় আনতে */
+            padding-bottom: 50px;
         }
 
-        @media (min-width: 1200px) {
-            .responsive-iframe {
-                transform: scale(1.2) translate(-15%, -12%);
-            }
-        }
-
-           /* Text Styling */
-        h1 {
+        .container {
+            max-width: 800px;
+            width: 100%;
+           
+            padding: 20px;
+            border-radius: 10px;
+            
             text-align: center;
-            color: #333;
         }
+
+        /* Text Styling */
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #white;
+            margin-bottom: 10px;
+        }
+
         h2 {
+            font-size: 20px;
+            font-weight: bold;
             color: #444;
+            margin-top: 15px;
         }
+
         p {
-            line-height: 1.8;
+            font-size: 16px;
+            line-height: 1.6;
             color: #666;
         }
+
         .highlight {
             color: #d9534f;
             font-weight: bold;
@@ -75,9 +76,9 @@
 
         /* Button Styling */
         .download, .contact {
-            text-align: center;
             margin-top: 20px;
         }
+
         .download a, .contact a {
             display: inline-block;
             background: #007bff;
@@ -87,6 +88,7 @@
             border-radius: 5px;
             font-weight: bold;
         }
+
         .download a:hover, .contact a:hover {
             background: #0056b3;
         }
@@ -106,9 +108,8 @@
         }
 
         @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
     </style>
 </head>
@@ -119,54 +120,48 @@
             <h1 class="text-xl font-bold">CG Bazar</h1>
             <div class="space-x-4">
                 <a href="dashboard.html" class="hover:text-blue-200">বর্ণের দাম</a>
-                <a href="page1.html" class="hover:text-blue-200 border-b-2">kitco Live</a>
-                
-                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
+                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
+                <a href="page3.html" class="hover:text-blue-200 border-b-2">নীতিমালা</a>
                 <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
                     লগআউট
                 </button>
             </div>
         </div>
     </nav>
-<div class="container">
-    <h1 class="text-2xl font-bold mb-4">সোনার দাম আপডেট নীতিমালা</h1>
 
-    <h2 class="text-xl font-semibold mt-4">🔹 দাম আপডেট সময়সূচি</h2>
-    <p>আমরা প্রতিদিন <span class="highlight">সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা</span> পর্যন্ত <span class="highlight">৫ থেকে ৮ বার</span> নতুন সোনার দাম আপডেট করি।</p>
-    <p><span class="highlight">**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</span></p>
+    <!-- Content Section -->
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>সোনার দাম আপডেট নীতিমালা</h1>
 
-    <h2 class="text-xl font-semibold mt-4">🔹 আইন ও নীতিমালা</h2>
-    <p>আমরা <span class="highlight">বাংলাদেশের আইন ও বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS)</span> এর নীতিমালা অনুসরণ করে সোনার দাম আপডেট করি।</p>
+            <h2>🔹 দাম আপডেট সময়সূচি</h2>
+            <p>আমরা প্রতিদিন <span class="highlight">সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা</span> পর্যন্ত <span class="highlight">৫ থেকে ৮ বার</span> নতুন সোনার দাম আপডেট করি।</p>
+            <p><span class="highlight">**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</span></p>
 
-    <h2 class="text-xl font-semibold mt-4">🔹 দায়িত্ব অস্বীকার</h2>
-    <p>এই ওয়েবসাইটে প্রদত্ত **সোনার দাম শুধুমাত্র তথ্যের জন্য**। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</p>
+            <h2>🔹 আইন ও নীতিমালা</h2>
+            <p>আমরা <span class="highlight">বাংলাদেশের আইন ও বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS)</span> এর নীতিমালা অনুসরণ করে সোনার দাম আপডেট করি।</p>
 
-    <div class="download mt-6">
-        <a href="#">📲 আমাদের অ্যাপ ডাউনলোড করুন</a>
+            <h2>🔹 দায়িত্ব অস্বীকার</h2>
+            <p>এই ওয়েবসাইটে প্রদত্ত **সোনার দাম শুধুমাত্র তথ্যের জন্য**। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</p>
+
+            <div class="download">
+                <a href="#">📲 আমাদের অ্যাপ ডাউনলোড করুন</a>
+            </div>
+
+            <div class="contact">
+                <a href="https://wa.me/8801630249778">📞 WhatsApp: 01630249778</a>
+            </div>
+
+            <!-- Gold Price Off Notification -->
+            <div id="livePriceOff" class="live-price-off">
+                🚨 **আজ আন্তর্জাতিক বাজার বন্ধ, সোনার লাইভ দাম আপডেট বন্ধ রয়েছে। আনুমানিক মূল্য আপডেট হতে পারে।** 🚨
+            </div>
+        </div>
     </div>
 
-    <div class="contact mt-4">
-        <a href="https://wa.me/8801630249778">📞 WhatsApp: 01630249778</a>
-    </div>
-
-    <div id="livePriceOff" class="live-price-off mt-6">
-        🚨 **আজ আন্তর্জাতিক বাজার বন্ধ, সোনার লাইভ দাম আপডেট বন্ধ রয়েছে। আনুমানিক মূল্য আপডেট হতে পারে।** 🚨
-    </div>
-</div>
-
-   <!-- Firebase Logout Script -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Logout Script -->
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8", // ❌ এটা Public না রাখাই ভালো!
-            authDomain: "cgbazar-a40c0.firebaseapp.com",
-            projectId: "cgbazar-a40c0",
-            storageBucket: "cgbazar-a40c0.firebasestorage.app",
-            messagingSenderId: "33145540262",
-            appId: "1:33145540262:web:2820f803fb1548458f6e67",
-            measurementId: "G-96NYF34CWB"
+      
         };
 
         // Initialize Firebase
