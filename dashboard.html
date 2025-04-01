@@ -6,44 +6,31 @@
     <title>CG Bazar Dashboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* নেভিগেশন বার স্টাইল */
-        .nav-container {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+         /* ফুটার স্টাইল */
+        .footer {
+            background: #1a1a1a;
+            padding: 40px 0;
+            margin-top: 50px;
+            border-top: 3px solid #ffd700;
         }
         
-        .nav-link {
-            position: relative;
-            padding: 8px 15px;
-            transition: all 0.3s ease;
-            border-radius: 5px;
+        .footer-links a {
+            color: #fff;
+            margin: 0 15px;
+            transition: color 0.3s ease;
         }
         
-        .nav-link:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
+        .footer-links a:hover {
+            color: #ffd700;
         }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: #ffd700;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover::after {
-            width: 80%;
-            left: 10%;
-        }
-
-        /* টেবিল স্টাইল (আগের ডিজাইন অপরিবর্তিত) */
         .gold-table {
             width: 90%;
             max-width: 600px;
@@ -82,50 +69,25 @@
             color: #000 !important;
             font-weight: bold;
         }
-
-        /* ফুটার স্টাইল */
-        .footer {
-            background: #1a1a1a;
-            padding: 40px 0;
-            margin-top: 50px;
-            border-top: 3px solid #ffd700;
-        }
-        
-        .footer-links a {
-            color: #fff;
-            margin: 0 15px;
-            transition: color 0.3s ease;
-        }
-        
-        .footer-links a:hover {
-            color: #ffd700;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- আপডেটেড নেভিগেশন বার -->
-    <nav class="nav-container">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex flex-wrap items-center justify-between">
-                <div class="flex items-center">
-                    <img src="logo.png" alt="CG Bazar Logo" class="h-12 w-12 mr-3">
-                    <span class="text-white text-2xl font-bold">CG Bazar</span>
-                </div>
-                
-                <div class="flex items-center space-x-6">
-                    <a href="dashboard.html" class="nav-link text-white">স্বর্ণের দাম</a>
-                    <a href="page1.html" class="nav-link text-white">Kitco Live</a>
-                    <a href="page3.html" class="nav-link text-white">নীতিমালা</a>
-                    <button onclick="logout()" 
-                            class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
-                        লগআউট
-                    </button>
-                </div>
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">CG Bazar</h1>
+            <div class="space-x-6">
+                <a href="dashboard.html" class="hover:text-blue-200">স্বর্ণের দাম </a>
+                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
+                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
+                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                    লগআউট
+                </button>
             </div>
         </div>
     </nav>
 
-   <!-- Main Content -->
+    <!-- Main Content -->
     <div class="main-container mx-auto mt-8 p-4">
         <h1 class="text-3xl font-bold text-center mb-8">ঢাকার স্বর্ণের বাজার এর মূল্য তালিকা</h1>
         
@@ -179,8 +141,7 @@
             <p id="marketTimestamp" class="timestamp"></p>
         </div>
     </div>
-
-      <!-- নতুন ফুটার সেকশন -->
+ <!-- ফুটার -->
     <footer class="footer">
         <div class="container mx-auto px-4">
             <div class="text-center">
@@ -207,7 +168,9 @@
             </div>
         </div>
     </footer>
- <script>
+
+    <!-- সমস্ত স্ক্রিপ্ট বডির শেষে -->
+    <script>
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
@@ -386,4 +349,3 @@
     </script>
 </body>
 </html>
-
