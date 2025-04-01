@@ -73,19 +73,29 @@
 </head>
 <body class="bg-gray-100">
     <!-- Navigation Bar -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">CG Bazar</h1>
-            <div class="space-x-6">
-                <a href="dashboard.html" class="hover:text-blue-200">স্বর্ণের দাম </a>
-                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
-                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
-                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
-                    লগআউট
-                </button>
+    <nav class="bg-gray-900 sticky top-0 z-50 border-b-2 border-[#ffd700]">
+    <div class="container mx-auto flex justify-between items-center px-4 py-3">
+        <h1 class="text-2xl font-bold text-[#ffd700] flex items-center">
+            <i class="fas fa-gem mr-2"></i>CG Bazar
+        </h1>
+        <div class="flex items-center space-x-8">
+            <div class="hidden md:flex space-x-8">
+                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+                </a>
+                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-chart-line mr-2"></i>kitco Live
+                </a>
+                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
+                </a>
             </div>
+            <button onclick="logout()" class="bg-[#ffd700] text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-[#ffcc00] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center">
+                <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Main Content -->
     <div class="main-container mx-auto mt-8 p-4">
