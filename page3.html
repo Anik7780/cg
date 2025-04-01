@@ -182,29 +182,36 @@
     </div>
 
     <script>
-        // মোবাইল মেনু ফাংশনালিটি
+          // Updated Mobile Menu Script
+    document.addEventListener('DOMContentLoaded', function() {
         const mobileMenu = document.getElementById('mobileMenu');
         const mobileMenuButton = document.getElementById('mobileMenuButton');
 
-        // মেনু টগল
-        mobileMenuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
+        // মেনু টগল ফাংশন
+        function toggleMenu() {
             mobileMenu.classList.toggle('mobile-menu-active');
+        }
+
+        // ক্লিক ইভেন্ট হ্যান্ডলার
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMenu();
         });
 
         // বাইরে ক্লিক করলে মেনু বন্ধ
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && e.target !== mobileMenuButton) {
                 mobileMenu.classList.remove('mobile-menu-active');
             }
         });
 
-        // ESC কী প্রেস করলে মেনু বন্ধ
-        document.addEventListener('keydown', (e) => {
+        // ESC প্রেস করলে মেনু বন্ধ
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 mobileMenu.classList.remove('mobile-menu-active');
             }
         });
+    });
 
         // Firebase কনফিগারেশন
         const firebaseConfig = {
