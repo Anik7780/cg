@@ -114,20 +114,21 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- নেভিগেশন বার -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">CG Bazar</h1>
-            <div class="space-x-6">
-                <a href="dashboard.html" class="hover:text-blue-200">স্বর্ণের দাম </a>
-                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
-                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
-                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
-                    লগআউট
-                </button>
-            </div>
+
+    <!-- পরিবর্তিত নেভ বার -->
+<nav class="text-white fixed w-full top-0 z-50" style="background: #007bff; padding: 8px 0;">
+    <div class="container mx-auto flex justify-between items-center px-4">
+        <h1 class="text-xl font-bold">CG Bazar</h1>
+        <div class="space-x-4">
+            <a href="dashboard.html" class="hover:text-blue-200 text-sm">স্বর্ণের দাম </a>
+            <a href="page1.html" class="hover:text-blue-200 text-sm">kitco Live</a>
+            <a href="page3.html" class="hover:text-blue-200 text-sm">নীতিমালা</a>
+            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-sm">
+                লগআউট
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
 
     <!-- Content Section -->
