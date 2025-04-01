@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <!-- আগের মতো মেটা ট্যাগ এবং স্টাইল -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CG Bazar Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* নেভিগেশন বার স্টাইল */
         .nav-container {
@@ -35,6 +41,46 @@
         .nav-link:hover::after {
             width: 80%;
             left: 10%;
+        }
+
+        /* টেবিল স্টাইল (আগের ডিজাইন অপরিবর্তিত) */
+        .gold-table {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+        .gold-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .gold-table th, .gold-table td {
+            padding: 12px;
+            border: 1px solid #fff;
+            text-align: center;
+        }
+        .gold-table th {
+            background-color: #ffcc00;
+            color: #000;
+            font-size: 18px;
+        }
+        .gold-table tr:nth-child(even) { background-color: #222; }
+        .highlight { font-weight: bold; color: #ffcc00; }
+        .timestamp {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+        }
+        tr.special-row td {
+            background-color: #ffcc00 !important;
+            color: #000 !important;
+            font-weight: bold;
         }
 
         /* ফুটার স্টাইল */
@@ -134,7 +180,7 @@
         </div>
     </div>
 
-       <!-- নতুন ফুটার সেকশন -->
+      <!-- নতুন ফুটার সেকশন -->
     <footer class="footer">
         <div class="container mx-auto px-4">
             <div class="text-center">
@@ -147,7 +193,7 @@
                 
                 <div class="social-links mb-6">
                     <a href="#" class="text-white mx-3 hover:text-gold">
-                        <i class="fab fa-facebook"></i> <!-- ফন্ট অসম আইকন যোগ করুন -->
+                        <i class="fab fa-facebook"></i>
                     </a>
                     <a href="#" class="text-white mx-3 hover:text-gold">
                         <i class="fab fa-whatsapp"></i>
