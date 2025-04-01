@@ -51,21 +51,21 @@
 
         /* Text Styling */
         h1 {
-            font-size: 24px;
+            font-size: 35px;
             font-weight: bold;
             color: #white;
             margin-bottom: 10px;
         }
 
         h2 {
-            font-size: 20px;
+            font-size: 30px;
             font-weight: bold;
             color: #444;
             margin-top: 15px;
         }
 
         p {
-            font-size: 16px;
+            font-size: 20px;
             line-height: 1.6;
             color: #666;
         }
@@ -117,14 +117,14 @@
 <body class="bg-gray-100">
     <!-- নেভিগেশন বার -->
     <!-- পরিবর্তিত নেভ বার -->
-<nav class="bg-blue-600 text-white py-1 fixed w-full top-0 z-50 shadow-md">
-    <div class="container mx-auto flex justify-between items-center px-2">
-        <h1 class="text-base font-semibold">CG Bazar</h1>
-        <div class="flex items-center space-x-3">
-            <a href="dashboard.html" class="text-xs hover:text-blue-200 px-2 py-1">স্বর্ণের দাম</a>
-            <a href="page1.html" class="text-xs hover:text-blue-200 px-2 py-1">kitco Live</a>
-            <a href="page3.html" class="text-xs hover:text-blue-200 px-2 py-1">নীতিমালা</a>
-            <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-xs px-2 py-1 rounded">
+<nav class="bg-blue-600 text-white fixed w-full top-0 z-50 shadow-md" style="padding: 6px 0;">
+    <div class="container mx-auto flex justify-between items-center px-4">
+        <h1 class="text-xl font-bold">CG Bazar</h1>
+        <div class="flex items-center gap-x-5">
+            <a href="dashboard.html" class="hover:text-blue-200 text-[16px]">স্বর্ণের দাম</a>
+            <a href="page1.html" class="hover:text-blue-200 text-[16px]">kitco Live</a>
+            <a href="page3.html" class="hover:text-blue-200 text-[16px]">নীতিমালা</a>
+            <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-[15px]">
                 লগআউট
             </button>
         </div>
@@ -135,9 +135,9 @@
     <!-- Content Section -->
     <div class="content-wrapper">
         <div class="container">
-            <h1>সোনার দাম আপডেট নীতিমালা</h1>
+            <h6>সোনার দাম আপডেট নীতিমালা</h6>
 
-            <h2>🔹 দাম আপডেট সময়সূচি</h2>
+            <h3>🔹 দাম আপডেট সময়সূচি</h3>
             <p>আমরা প্রতিদিন <span class="highlight">সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা</span> পর্যন্ত <span class="highlight">৫ থেকে ৮ বার</span> নতুন সোনার দাম আপডেট করি।</p>
             <p><span class="highlight">**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</span></p>
 
