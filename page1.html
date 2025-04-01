@@ -10,6 +10,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
+        .mobile-menu-active {
+    display: block !important;
+}
         * {
             margin: 0;
             padding: 0;
@@ -51,20 +54,53 @@
 </head>
 <body class="bg-gray-100">
     <!-- নেভিগেশন বার -->
-    <nav class="bg-blue-600 text-white p-4 fixed w-full top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">CG Bazar</h1>
-            <div class="space-x-4">
-                <a href="dashboard.html" class="hover:text-blue-200">বর্ণের দাম</a>
-                <a href="page1.html" class="hover:text-blue-200 border-b-2">kitco Live</a>
-                
-                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
-                <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
-                    লগআউট
-                </button>
+   <!-- হ্যামবার্গার মেনু সহ আপডেটেড নেভ বার -->
+<nav class="bg-gray-900 sticky top-0 z-50 border-b-2 border-[#ffd700]">
+    <div class="container mx-auto flex justify-between items-center px-4 py-3">
+        <!-- লোগো ও হ্যামবার্গার বাটন -->
+        <div class="flex items-center space-x-4">
+            <button id="mobileMenuButton" class="md:hidden text-[#ffd700]">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold text-[#ffd700] flex items-center">
+                <i class="fas fa-gem mr-2"></i>CG Bazar
+            </h1>
+        </div>
+
+        <!-- ডেস্কটপ মেনু (মোবাইলে লুকানো) -->
+        <div class="hidden md:flex items-center space-x-8">
+            <div class="flex space-x-8">
+                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+                </a>
+                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-chart-line mr-2"></i>kitco Live
+                </a>
+                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
+                </a>
+            </div>
+            <button onclick="logout()" class="bg-[#ffd700] text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-[#ffcc00] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center">
+                <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+            </button>
+        </div>
+
+        <!-- মোবাইল মেনু (ডেস্কটপে লুকানো) -->
+        <div id="mobileMenu" class="md:hidden absolute top-16 left-0 w-full bg-gray-900 py-4 hidden">
+            <div class="flex flex-col items-center space-y-4">
+                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg">
+                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+                </a>
+                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg">
+                    <i class="fas fa-chart-line mr-2"></i>kitco Live
+                </a>
+                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg">
+                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- মেইন কন্টেন্ট -->
     <div class="iframe-wrapper">
@@ -77,6 +113,10 @@
     </div>
 
     <script>
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.classList.toggle('mobile-menu-active');
+});
         // Firebase কনফিগারেশন
         const firebaseConfig = {
             apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
