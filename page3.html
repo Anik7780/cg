@@ -12,32 +12,30 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* মোবাইল মেনু স্টাইল */
-        #mobileMenu {
-            display: none;
-            z-index: 1000;
-            transform: translateY(-20px);
-            opacity: 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            border-bottom: 2px solid #ffd700;
-        }
-        .mobile-menu-active {
-            display: block !important;
-            transform: translateY(0);
-            opacity: 1;
-        }
+       #mobileMenu {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+}
 
-        /* লিংক স্টাইল */
-        .nav-link, .mobile-nav-link {
-            color: white;
-            transition: all 0.3s ease;
-            padding: 10px 20px;
-        }
-        .nav-link:hover, .mobile-nav-link:hover {
-            color: #ffd700;
-            transform: scale(1.05);
-        }
+.mobile-menu-active {
+    display: block !important;
+    animation: menuSlide 0.3s ease-out;
+}
+
+@keyframes menuSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
         /* লগআউট বাটন স্টাইল */
         .logout-btn {
