@@ -17,16 +17,17 @@
         }
 
         /* Navigation Bar */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #007bff;
-            color: white;
-            padding: 15px 0;
-            z-index: 50;
-        }
+       nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #007bff;
+    color: white;
+    padding: 8px 0;  /* Reduced padding */
+    z-index: 50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Added subtle shadow */
+}
 
         /* Content Centering */
         .content-wrapper {
@@ -114,16 +115,16 @@
     </style>
 </head>
 <body class="bg-gray-100">
-
+    <!-- নেভিগেশন বার -->
     <!-- পরিবর্তিত নেভ বার -->
-<nav class="text-white fixed w-full top-0 z-50" style="background: #007bff; padding: 8px 0;">
-    <div class="container mx-auto flex justify-between items-center px-4">
-        <h1 class="text-xl font-bold">CG Bazar</h1>
-        <div class="space-x-4">
-            <a href="dashboard.html" class="hover:text-blue-200 text-sm">স্বর্ণের দাম </a>
+<nav class="bg-blue-600 text-white py-2">  <!-- Reduced vertical padding -->
+    <div class="container mx-auto flex justify-between items-center px-4 max-w-6xl">  <!-- Added max-width -->
+        <h1 class="text-lg font-bold">CG Bazar</h1>  <!-- Reduced text size -->
+        <div class="flex items-center space-x-4">  <!-- Reduced spacing -->
+            <a href="dashboard.html" class="hover:text-blue-200 text-sm">স্বর্ণের দাম</a>  <!-- Added text-sm -->
             <a href="page1.html" class="hover:text-blue-200 text-sm">kitco Live</a>
             <a href="page3.html" class="hover:text-blue-200 text-sm">নীতিমালা</a>
-            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-sm">
+            <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-sm">  <!-- Reduced padding -->
                 লগআউট
             </button>
         </div>
@@ -151,7 +152,7 @@
             </div>
 
             <div class="contact">
-                <a href="https://wa.me/8801630249778">📞 WhatsApp: 01630249778</a>
+                <a href="https://wa.me/8801630249778">📞 WhatsApp: 01404819138</a>
             </div>
 
             <!-- Gold Price Off Notification -->
