@@ -6,60 +6,83 @@
     <title>CG Bazar Dashboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
+        :root {
+            --primary-bg: #1a1a2e;       /* ডার্ক নেভি ব্লু */
+            --accent-gold: #D4AF37;      /* ক্লাসিক গোল্ড */
+            --secondary-gold: #FFD700;    /* ব্রাইট গোল্ড */
+            --dark-bg: #2a2a2a;          /* টেবিল ব্যাকগ্রাউন্ড */
+            --text-light: #f8f9fa;        /* প্রাইমারি টেক্সট */
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #0f0c29, #302b63);
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            background: var(--primary-bg);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .gold-btn {
+            background: linear-gradient(45deg, var(--accent-gold), #c5a327);
+            color: var(--primary-bg);
+            transition: all 0.3s ease;
+        }
+
+        .gold-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
         .gold-table {
-            width: 90%;
-            max-width: 600px;
-            margin: 20px auto;
-            background: #000;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: white;
+            background: var(--dark-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
         }
-        .gold-table table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .gold-table th, .gold-table td {
-            padding: 12px;
-            border: 1px solid #fff;
-            text-align: center;
-        }
+
         .gold-table th {
-            background-color: #ffcc00;
-            color: #000;
-            font-size: 18px;
+            background: linear-gradient(45deg, var(--accent-gold), #c5a327);
+            color: var(--primary-bg);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
         }
-        .gold-table tr:nth-child(even) { background-color: #222; }
-        .highlight { font-weight: bold; color: #ffcc00; }
-        .timestamp {
-            margin-top: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: red;
+
+        .gold-table td {
+            color: var(--text-light);
+            border-color: rgba(212, 175, 55, 0.3);
         }
-        tr.special-row td {
-            background-color: #ffcc00 !important;
-            color: #000 !important;
-            font-weight: bold;
+
+        .special-row {
+            background: rgba(212, 175, 55, 0.15) !important;
+        }
+
+        .brand-text {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-gold);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .footer {
+            background: var(--primary-bg);
+            border-top: 2px solid var(--accent-gold);
         }
     </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
+<body class="text-gray-100">
     <!-- Navigation Bar -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">CG Bazar</h1>
-            <div class="space-x-6">
-                <a href="dashboard.html" class="hover:text-blue-200">স্বর্ণের দাম </a>
-                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
-                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
-                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+    <nav class="nav-bar fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="brand-text text-2xl">CG Bazar</h1>
+            <div class="flex space-x-4 items-center">
+                <a href="dashboard.html" class="hover:text-accent-gold transition-colors">স্বর্ণের দাম</a>
+                <a href="page1.html" class="hover:text-accent-gold transition-colors">কিটকো লাইভ</a>
+                <a href="page3.html" class="hover:text-accent-gold transition-colors">নীতিমালা</a>
+                <button onclick="logout()" class="gold-btn px-6 py-2 rounded-full font-bold">
                     লগআউট
                 </button>
             </div>
@@ -120,6 +143,17 @@
             <p id="marketTimestamp" class="timestamp"></p>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer py-8 mt-16">
+        <div class="container mx-auto text-center space-y-2">
+            <p class="text-secondary-gold">&copy; 2023 CG Bazar</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-accent-gold">Privacy Policy</a>
+                <a href="#" class="hover:text-accent-gold">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 
     <!-- সমস্ত স্ক্রিপ্ট বডির শেষে -->
     <script>
