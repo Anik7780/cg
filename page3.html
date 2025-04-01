@@ -9,27 +9,23 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* মোবাইল মেনু স্টাইল */
-        #mobileMenu {
-            display: none;
-            position: absolute;
-            top: 100%; /* নেভবারের ঠিক নিচে */
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: #1a1a1a;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+      /* মোবাইল মেনু লিংক স্টাইল */
+.mobile-nav-link {
+    color: white !important; /* সাদা কালার ফোর্স করুন */
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+}
 
-        .mobile-menu-active {
-            display: block !important;
-            animation: menuSlide 0.3s ease-out;
-        }
+.mobile-nav-link:hover {
+    color: #ffd700 !important;
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
-        @keyframes menuSlide {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* মোবাইল মেনু কন্টেইনার */
+#mobileMenu {
+    background: #1a1a1a; /* ডার্ক ব্যাকগ্রাউন্ড নিশ্চিত করুন */
+    /* বাকি স্টাইল একই থাকবে */
+}
 
         /* মেনু আইটেম স্টাইল */
         .mobile-nav-link {
@@ -66,10 +62,11 @@
         </div>
 
         <!-- মোবাইল মেনু -->
-        <div id="mobileMenu" class="md:hidden">
-            <a href="dashboard.html" class="mobile-nav-link">
-                <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
-            </a>
+       <div id="mobileMenu" class="md:hidden absolute top-16 left-0 w-full bg-gray-900 py-4 hidden" style="color: white !important;">
+    <div class="flex flex-col items-center space-y-4">
+        <a href="dashboard.html" class="mobile-nav-link text-white hover:text-[#ffd700]">
+            <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+        </a>
             <a href="page1.html" class="mobile-nav-link">
                 <i class="fas fa-chart-line mr-2"></i>kitco Live
             </a>
