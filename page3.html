@@ -9,80 +9,74 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* মোবাইল মেনু স্টাইল */
+        #mobileMenu {
+            display: none;
+            z-index: 1000;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-bottom: 2px solid #ffd700;
+        }
         .mobile-menu-active {
-    display: block !important;
-}
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            display: block !important;
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        /* Navigation Bar */
-       nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: #007bff;
-    color: white;
-    padding: 8px 0;  /* Reduced padding */
-    z-index: 50;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Added subtle shadow */
-}
+        /* লিংক স্টাইল */
+        .nav-link, .mobile-nav-link {
+            color: white;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+        }
+        .nav-link:hover, .mobile-nav-link:hover {
+            color: #ffd700;
+            transform: scale(1.05);
+        }
 
-        /* Content Centering */
+        /* লগআউট বাটন স্টাইল */
+        .logout-btn {
+            background: #ffd700;
+            color: #1a1a1a;
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #ffcc00;
+            transform: scale(1.05);
+        }
+
+        /* কন্টেন্ট স্টাইল */
         .content-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding-top: 80px; /* Navbar এর নিচে ঠিক জায়গায় আনতে */
+            padding-top: 80px;
             padding-bottom: 50px;
         }
 
         .container {
             max-width: 800px;
             width: 100%;
-           
             padding: 20px;
             border-radius: 10px;
-            
             text-align: center;
         }
 
-        /* Text Styling */
-        h1 {
-            font-size: 35px;
-            font-weight: bold;
-            color: #white;
-            margin-bottom: 10px;
-        }
+        h1 { font-size: 35px; font-weight: bold; margin-bottom: 10px; }
+        h2 { font-size: 30px; color: #444; margin-top: 15px; }
+        p { font-size: 20px; line-height: 1.6; color: #666; }
+        .highlight { color: #d9534f; font-weight: bold; }
 
-        h2 {
-            font-size: 30px;
-            font-weight: bold;
-            color: #444;
-            margin-top: 15px;
-        }
-
-        p {
-            font-size: 20px;
-            line-height: 1.6;
-            color: #666;
-        }
-
-        .highlight {
-            color: #d9534f;
-            font-weight: bold;
-        }
-
-        /* Button Styling */
-        .download, .contact {
-            margin-top: 20px;
-        }
-
+        /* বাটন স্টাইল */
         .download a, .contact a {
             display: inline-block;
             background: #007bff;
@@ -93,21 +87,11 @@
             font-weight: bold;
         }
 
-        .download a:hover, .contact a:hover {
-            background: #0056b3;
-        }
-
-        /* Live Price Notification */
         .live-price-off {
-            text-align: center;
-            margin-top: 20px;
             background-color: #f44336;
             color: white;
             padding: 15px;
             border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            display: none;
             animation: blink 1.5s infinite;
         }
 
@@ -119,61 +103,61 @@
 </head>
 <body class="bg-gray-100">
     <!-- নেভিগেশন বার -->
-<!-- হ্যামবার্গার মেনু সহ আপডেটেড নেভ বার -->
-<nav class="bg-gray-900 sticky top-0 z-50 border-b-2 border-[#ffd700]">
-    <div class="container mx-auto flex justify-between items-center px-4 py-3">
-        <!-- লোগো ও হ্যামবার্গার বাটন -->
-        <div class="flex items-center space-x-4">
-            <button id="mobileMenuButton" class="md:hidden text-[#ffd700]">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-            <h1 class="text-2xl font-bold text-[#ffd700] flex items-center">
-                <i class="fas fa-gem mr-2"></i>CG Bazar
-            </h1>
-        </div>
-
-        <!-- ডেস্কটপ মেনু (মোবাইলে লুকানো) -->
-        <div class="hidden md:flex items-center space-x-8">
-            <div class="flex space-x-8">
-                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
-                </a>
-                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-chart-line mr-2"></i>kitco Live
-                </a>
-                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
-                </a>
+    <nav class="bg-gray-900 sticky top-0 z-50 border-b-2 border-[#ffd700]">
+        <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div class="flex items-center space-x-4">
+                <button id="mobileMenuButton" class="md:hidden text-[#ffd700]">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-2xl font-bold text-[#ffd700] flex items-center">
+                    <i class="fas fa-gem mr-2"></i>CG Bazar
+                </h1>
             </div>
-            <button onclick="logout()" class="bg-[#ffd700] text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-[#ffcc00] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center">
-                <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
-            </button>
-        </div>
 
-        <!-- মোবাইল মেনু (ডেস্কটপে লুকানো) -->
-        <div id="mobileMenu" class="md:hidden absolute top-16 left-0 w-full bg-gray-900 py-4 hidden">
-            <div class="flex flex-col items-center space-y-4">
-                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
-                </a>
-                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-chart-line mr-2"></i>kitco Live
-                </a>
-                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
-                </a>
+            <!-- ডেস্কটপ মেনু -->
+            <div class="hidden md:flex items-center space-x-8">
+                <div class="flex space-x-8">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+                    </a>
+                    <a href="page1.html" class="nav-link">
+                        <i class="fas fa-chart-line mr-2"></i>kitco Live
+                    </a>
+                    <a href="page3.html" class="nav-link">
+                        <i class="fas fa-file-contract mr-2"></i>নীতিমালা
+                    </a>
+                </div>
+                <button onclick="logout()" class="logout-btn">
+                    <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+                </button>
+            </div>
+
+            <!-- মোবাইল মেনু -->
+            <div id="mobileMenu" class="md:hidden absolute top-16 left-0 w-full bg-gray-900 py-4 hidden">
+                <div class="flex flex-col items-center space-y-4">
+                    <a href="dashboard.html" class="mobile-nav-link">
+                        <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
+                    </a>
+                    <a href="page1.html" class="mobile-nav-link">
+                        <i class="fas fa-chart-line mr-2"></i>kitco Live
+                    </a>
+                    <a href="page3.html" class="mobile-nav-link">
+                        <i class="fas fa-file-contract mr-2"></i>নীতিমালা
+                    </a>
+                    <button onclick="logout()" class="logout-btn mt-4">
+                        <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-
-    <!-- Content Section -->
+    <!-- কন্টেন্ট সেকশন -->
     <div class="content-wrapper">
         <div class="container">
-            <h6>সোনার দাম আপডেট নীতিমালা</h6>
+            <h1>সোনার দাম আপডেট নীতিমালা</h1>
 
-            <h3>🔹 দাম আপডেট সময়সূচি</h3>
+            <h2>🔹 দাম আপডেট সময়সূচি</h2>
             <p>আমরা প্রতিদিন <span class="highlight">সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা</span> পর্যন্ত <span class="highlight">৫ থেকে ৮ বার</span> নতুন সোনার দাম আপডেট করি।</p>
             <p><span class="highlight">**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</span></p>
 
@@ -184,49 +168,70 @@
             <p>এই ওয়েবসাইটে প্রদত্ত **সোনার দাম শুধুমাত্র তথ্যের জন্য**। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</p>
 
             <div class="download">
-                <a href="#">📲 আমাদের অ্যাপ ডাউনলোড করুন</a>
+                <a href="#"><i class="fas fa-download mr-2"></i>আমাদের অ্যাপ ডাউনলোড করুন</a>
             </div>
 
             <div class="contact">
-                <a href="https://wa.me/8801630249778">📞 WhatsApp: 01630249778</a>
+                <a href="https://wa.me/8801630249778"><i class="fab fa-whatsapp mr-2"></i>WhatsApp: 01630249778</a>
             </div>
 
-            <!-- Gold Price Off Notification -->
-            <div id="livePriceOff" class="live-price-off">
+            <div id="livePriceOff" class="live-price-off mt-4">
                 🚨 **আজ আন্তর্জাতিক বাজার বন্ধ, সোনার লাইভ দাম আপডেট বন্ধ রয়েছে। আনুমানিক মূল্য আপডেট হতে পারে।** 🚨
             </div>
         </div>
     </div>
 
-    <!-- Firebase Logout Script -->
     <script>
-        document.getElementById('mobileMenuButton').addEventListener('click', function() {
-    const mobileMenu = document.getElementById('mobileMenu');
-    mobileMenu.classList.toggle('mobile-menu-active');
-});
-      
+        // মোবাইল মেনু ফাংশনালিটি
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+
+        // মেনু টগল
+        mobileMenuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('mobile-menu-active');
+        });
+
+        // বাইরে ক্লিক করলে মেনু বন্ধ
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('mobile-menu-active');
+            }
+        });
+
+        // ESC কী প্রেস করলে মেনু বন্ধ
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                mobileMenu.classList.remove('mobile-menu-active');
+            }
+        });
+
+        // Firebase কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
+            authDomain: "cgbazar-a40c0.firebaseapp.com",
+            projectId: "cgbazar-a40c0",
+            storageBucket: "cgbazar-a40c0.firebasestorage.app",
+            messagingSenderId: "33145540262",
+            appId: "1:33145540262:web:2820f803fb1548458f6e67",
+            measurementId: "G-96NYF34CWB"
         };
 
-        // Initialize Firebase
+        // Firebase ইনিশিয়ালাইজেশন
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(app);
 
-        // Authentication Check
-        auth.onAuthStateChanged(user => {
-            if (!user) window.location.href = "index.html";
-        });
-
-        // Logout Function
+        // লগআউট ফাংশন
         function logout() {
             auth.signOut().then(() => {
                 window.location.href = "index.html";
             });
         }
 
-        // Check if today is Saturday or Sunday
+        // সাপ্তাহিক ছুটির চেক
         function checkWeekend() {
             const today = new Date();
-            const day = today.getDay(); // 0 = Sunday, 6 = Saturday
+            const day = today.getDay(); 
             
             if (day === 0 || day === 6) {
                 document.getElementById("livePriceOff").style.display = "block";
@@ -235,6 +240,5 @@
         
         checkWeekend();
     </script>
-
 </body>
 </html>
