@@ -10,8 +10,37 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
-        .mobile-menu-active {
+        /* মোবাইল মেনু স্টাইল */
+#mobileMenu {
+    display: none;
+    z-index: 1000;
+}
+.mobile-menu-active {
     display: block !important;
+}
+
+/* লিংক স্টাইল */
+.nav-link, .mobile-nav-link {
+    color: white;
+    transition: all 0.3s ease;
+}
+.nav-link:hover, .mobile-nav-link:hover {
+    color: #ffd700;
+    transform: scale(1.05);
+}
+
+/* লগআউট বাটন স্টাইল */
+.logout-btn {
+    background: #ffd700;
+    color: #1a1a1a;
+    padding: 8px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.logout-btn:hover {
+    background: #ffcc00;
+    transform: scale(1.05);
 }
         * {
             margin: 0;
@@ -54,10 +83,9 @@
 </head>
 <body class="bg-gray-100">
     <!-- নেভিগেশন বার -->
-   <!-- হ্যামবার্গার মেনু সহ আপডেটেড নেভ বার -->
 <nav class="bg-gray-900 sticky top-0 z-50 border-b-2 border-[#ffd700]">
     <div class="container mx-auto flex justify-between items-center px-4 py-3">
-        <!-- লোগো ও হ্যামবার্গার বাটন -->
+        <!-- হ্যামবার্গার বাটন ও লোগো -->
         <div class="flex items-center space-x-4">
             <button id="mobileMenuButton" class="md:hidden text-[#ffd700]">
                 <i class="fas fa-bars text-xl"></i>
@@ -67,36 +95,24 @@
             </h1>
         </div>
 
-        <!-- ডেস্কটপ মেনু (মোবাইলে লুকানো) -->
+        <!-- ডেস্কটপ মেনু -->
         <div class="hidden md:flex items-center space-x-8">
             <div class="flex space-x-8">
-                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
-                </a>
-                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-chart-line mr-2"></i>kitco Live
-                </a>
-                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
-                </a>
+                <a href="dashboard.html" class="nav-link">স্বর্ণের দাম</a>
+                <a href="page1.html" class="nav-link">kitco Live</a>
+                <a href="page3.html" class="nav-link">নীতিমালা</a>
             </div>
-            <button onclick="logout()" class="bg-[#ffd700] text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-[#ffcc00] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center">
-                <i class="fas fa-sign-out-alt mr-2"></i>লগআউট
+            <button onclick="logout()" class="logout-btn">
+                লগআউট
             </button>
         </div>
 
-        <!-- মোবাইল মেনু (ডেস্কটপে লুকানো) -->
+        <!-- মোবাইল মেনু -->
         <div id="mobileMenu" class="md:hidden absolute top-16 left-0 w-full bg-gray-900 py-4 hidden">
             <div class="flex flex-col items-center space-y-4">
-                <a href="dashboard.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-coins mr-2"></i>স্বর্ণের দাম
-                </a>
-                <a href="page1.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-chart-line mr-2"></i>kitco Live
-                </a>
-                <a href="page3.html" class="text-white hover:text-[#ffd700] text-lg">
-                    <i class="fas fa-file-contract mr-2"></i>নীতিমালা
-                </a>
+                <a href="dashboard.html" class="mobile-nav-link">স্বর্ণের দাম</a>
+                <a href="page1.html" class="mobile-nav-link">kitco Live</a>
+                <a href="page3.html" class="mobile-nav-link">নীতিমালা</a>
             </div>
         </div>
     </div>
@@ -113,9 +129,17 @@
     </div>
 
     <script>
-        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+      // মোবাইল মেনু টগল
+document.getElementById('mobileMenuButton').addEventListener('click', function() {
     const mobileMenu = document.getElementById('mobileMenu');
     mobileMenu.classList.toggle('mobile-menu-active');
+});
+
+// রেসপনসিভ মেনু ক্লোজ
+window.addEventListener('resize', function() {
+    if(window.innerWidth >= 768) {
+        document.getElementById('mobileMenu').classList.remove('mobile-menu-active');
+    }
 });
         // Firebase কনফিগারেশন
         const firebaseConfig = {
