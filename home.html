@@ -1,23 +1,70 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <!-- হেড সেকশন কপি করুন -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>নীতিমালা - CG Bazar</title>
+    <title>CG Bazar Dashboard</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        .gold-table {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+        .gold-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .gold-table th, .gold-table td {
+            padding: 12px;
+            border: 1px solid #fff;
+            text-align: center;
+        }
+        .gold-table th {
+            background-color: #ffcc00;
+            color: #000;
+            font-size: 18px;
+        }
+        .gold-table tr:nth-child(even) { background-color: #222; }
+        .highlight { font-weight: bold; color: #ffcc00; }
+        .timestamp {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+        }
+        tr.special-row td {
+            background-color: #ffcc00 !important;
+            color: #000 !important;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
-    <!-- একই ন্যাভ বার -->
-    <nav class="bg-blue-600 text-white p-4 shadow-lg">
-        <!-- ন্যাভ কন্টেন্ট পেস্ট করুন -->
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">CG Bazar</h1>
+            <div class="space-x-6">
+                <a href="home.html" class="hover:text-blue-200">স্বর্ণের দাম </a>
+                <a href="page1.html" class="hover:text-blue-200">kitco Live</a>
+                <a href="page3.html" class="hover:text-blue-200">নীতিমালা</a>
+                <button onclick="logout()" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+                    লগআউট
+                </button>
+            </div>
+        </div>
     </nav>
-
-    <!-- পেজ স্পেসিফিক কন্টেন্ট -->
-    <div class="container mx-auto py-8 px-4">
-        <h1 class="text-3xl font-bold text-center mb-8">নীতিমালা</h1>
-        <!-- আপনার কন্টেন্ট যোগ করুন -->
-    </div>
 
     <!-- Main Content -->
     <div class="main-container mx-auto mt-8 p-4">
@@ -251,11 +298,6 @@
             fetchGoldPrice();
             fetchMarketRates();
         }, 60000); // 1 মিনিট পর আপডেট
-      <!-- Firebase এবং স্ক্রিপ্ট যোগ করুন -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script>
-        // একই Firebase কনফিগারেশন এবং অথেন্টিকেশন চেক
     </script>
 </body>
 </html>
