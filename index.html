@@ -1,159 +1,374 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="bn" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CG Bazar Gold Price in Bangladesh</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ঢাকার স্বর্ণের বাজারের মূল্য তালিকা</title>
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0B0B0F" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
+          colors: { base: {50:'#f6f7f9',100:'#ECEEF2',900:'#0B0B0F'} },
+          boxShadow: { soft:'0 6px 30px rgba(0,0,0,.12)', ring:'inset 0 0 0 1px rgba(255,255,255,.06)'}
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Login to CG Bazar to check the latest gold price in Bangladesh. Secure and fast access to your gold trading account.">
-    <meta name="keywords" content="CG Bazar, Gold Price, Gold Rate, Bangladesh Gold Market, Login, Signup, Gold Trading">
-    <meta name="author" content="CG Bazar Team">
-    <link rel="canonical" href="https://www.cgbazar.com/login" />
+```
+/* Background */
+.bgfx{position:fixed; inset:0; z-index:-1;}
+.bgfx::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(251,191,36,.12), transparent),
+    radial-gradient(900px 500px at 100% 10%, rgba(168,85,247,.10), transparent);
+}
 
-    <!-- Open Graph (for social media sharing) -->
-    <meta property="og:title" content="CG Bazar Gold Price in Bangladesh">
-    <meta property="og:description" content="Stay updated with the current gold prices in Bangladesh. Login or create an account on CG Bazar.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.cgbazar.com/login">
-    <meta property="og:image" content="https://www.cgbazar.com/assets/images/preview.jpg">
+/* Topbar (modern) */
+.topbar{ transition: background-color .2s, box-shadow .2s, border-color .2s; }
+.topbar.scrolled{ background: rgba(11,11,15,.82); box-shadow: 0 8px 24px rgba(0,0,0,.22); border-color: rgba(255,255,255,.12); }
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CG Bazar Gold Price in Bangladesh">
-    <meta name="twitter:description" content="Stay updated with the current gold prices in Bangladesh. Login or create an account on CG Bazar.">
-    <meta name="twitter:image" content="https://www.cgbazar.com/assets/images/preview.jpg">
+.brand{ display:inline-flex; align-items:center; gap:.55rem; }
+.logo{
+  position:relative; width:28px; height:28px; border-radius:999px;
+  background: radial-gradient(circle at 30% 30%, #fbbf24, transparent 60%),
+              radial-gradient(circle at 70% 70%, #a855f7, transparent 60%), #0b0b0f;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 0 18px rgba(251,191,36,.18);
+}
+.logo::after{ content:""; position:absolute; inset:0; border-radius:inherit; border:1px solid rgba(255,255,255,.12); }
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+.nav-link{ position:relative; padding:.55rem .95rem; border-radius:999px; font-weight:600; font-size:13px; opacity:.95; display:inline-flex; align-items:center; gap:.45rem; }
+.nav-link:hover{ background: rgba(255,255,255,.08); }
+.nav-link.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:#fff; }
+.nav-icon{ width:16px; height:16px; opacity:.9 }
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+.nav-rail{ position:relative; }
+.nav-underline{ position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,#fbbf24,#a855f7); border-radius:2px; transition:.25s; opacity:.85 }
+
+/* Drawer */
+#mobilePanel{ transform: translateX(-100%); transition: transform .28s ease; }
+#mobileMenu.open #mobilePanel{ transform: translateX(0); }
+
+/* Cards / tables */
+.glass{ backdrop-filter:saturate(140%) blur(14px) }
+.table-wrap{ position:relative; overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.1); }
+.table-wrap::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:28px; pointer-events:none; background:linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.22)); }
+@media (min-width: 640px){ .table-wrap::after{ display:none } }
+
+.flash{ animation:flashBg .9s ease-out }
+@keyframes flashBg{ 0%{ background:linear-gradient(90deg,rgba(251,191,36,.22),transparent)} 100%{ background:transparent } }
+
+/* Mobile: table -> cards */
+@media (max-width:640px){
+  table.rtable{ width:100%; border-collapse:separate; border-spacing:0; }
+  table.rtable thead{ display:none; }
+  table.rtable tbody{ display:block; }
+  table.rtable tr{ display:grid; grid-template-columns:1fr; gap:.35rem; margin:10px 0; padding:.6rem .7rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.14); }
+  table.rtable td{ display:flex; justify-content:space-between; align-items:center; padding:.45rem .25rem; }
+  table.rtable td::before{ content: attr(data-label); font-weight:600; color:#a3a3a3; margin-right:.75rem; }
+  table.rtable td.price{ justify-content:flex-end; font-weight:800; font-size:clamp(16px,5.2vw,22px); color:#facc15; letter-spacing:.2px; }
+  table.rtable td[data-label="মূল্য (BDT)"]{ border-top:1px dashed rgba(255,255,255,.16); padding-top:.6rem; }
+}
+
+/* Ads */
+.ad-banner{ display:flex; align-items:center; justify-content:center; border-radius:16px; background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.16); color:#bbb; text-align:center; margin:12px 0; overflow:hidden; min-height:90px; position:relative }
+.ad-label{ position:absolute; top:6px; right:10px; font-size:10px; letter-spacing:.08em; opacity:.7 }
+@media(max-width:640px){ .ad-banner{ min-height:100px } }
+
+/* Tabs (mobile quick nav bottom) */
+.tabs{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; background:rgba(255,255,255,.05); padding:6px; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
+.tab{ padding:.5rem .8rem; border-radius:999px; text-align:center; font-weight:600; font-size:13px; opacity:.9; }
+.tab.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:white; }
+@media(min-width:1024px){ .tabs, .bottom-tabs{ display:none } }
+```
+
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <!-- Login Form -->
-        <div id="loginForm">
-            <h1 class="text-2xl font-bold mb-6 text-center">Login to CG Bazar</h1>
-            <div class="mb-4">
-                <input type="email" id="email" placeholder="Email" class="w-full p-3 border rounded-lg" aria-label="Email Address">
-            </div>
-            <div class="mb-4">
-                <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg" aria-label="Password">
-            </div>
-            <div class="mb-4 flex items-center">
-                <input type="checkbox" id="rememberMe" class="mr-2">
-                <label for="rememberMe" class="text-gray-600">Remember Me</label>
-            </div>
-            <button onclick="loginUser()" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">
-                Login
-            </button>
-            <div class="mt-4 text-center">
-                <a href="#" onclick="toggleForm('signupForm')" class="text-blue-600 hover:underline">Create New Account</a> |
-                <a href="#" onclick="toggleForm('forgotPasswordForm')" class="text-blue-600 hover:underline">Forgot Password?</a>
-            </div>
-        </div>
+<body class="bg-base-900 text-gray-100 antialiased selection:bg-amber-400/40" data-view="today">
+  <div class="bgfx"></div>
 
-        <!-- Signup Form -->
-        <div id="signupForm" class="hidden">
-            <h2 class="text-2xl font-bold mb-6 text-center">Create Account</h2>
-            <div class="mb-4">
-                <input type="email" id="signupEmail" placeholder="Email" class="w-full p-3 border rounded-lg" aria-label="Signup Email">
-            </div>
-            <div class="mb-4">
-                <input type="password" id="signupPassword" placeholder="Password (6+ characters)" class="w-full p-3 border rounded-lg" aria-label="Signup Password">
-            </div>
-            <button onclick="signupUser()" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition">
-                Sign Up
-            </button>
-            <div class="mt-4 text-center">
-                <a href="#" onclick="toggleForm('loginForm')" class="text-blue-600 hover:underline">Back to Login</a>
-            </div>
-        </div>
+  <!-- Topbar -->
 
-        <!-- Forgot Password Form -->
-        <div id="forgotPasswordForm" class="hidden">
-            <h2 class="text-2xl font-bold mb-6 text-center">Reset Password</h2>
-            <div class="mb-4">
-                <input type="email" id="resetEmail" placeholder="Enter your email" class="w-full p-3 border rounded-lg" aria-label="Reset Email">
-            </div>
-            <button onclick="sendPasswordReset()" class="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition">
-                Send Reset Link
-            </button>
-            <div class="mt-4 text-center">
-                <a href="#" onclick="toggleForm('loginForm')" class="text-blue-600 hover:underline">Back to Login</a>
-            </div>
+  <div id="topbar" class="topbar sticky top-0 z-40 backdrop-blur-xl bg-base-900/70 border-b border-white/10">
+    <header class="max-w-[min(1100px,92vw)] mx-auto px-4 py-3">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0 brand">
+          <button id="menuToggle" class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/10 hover:bg-white/15" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+          <span class="logo shrink-0"></span>
+          <h1 class="truncate text-[clamp(18px,4.2vw,28px)] font-extrabold tracking-[-0.02em] text-white">স্বর্ণের বাজার মূল্য</h1>
         </div>
+        <nav class="hidden md:flex items-center gap-2 nav-rail">
+          <button class="nav-link" data-go="today">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M12 3v18" opacity=".6"/></svg>
+            আজকের দাম
+          </button>
+          <button class="nav-link" data-go="old">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><rect x="3" y="4" width="4" height="16" rx="1"/></svg>
+            পুরাতন
+          </button>
+          <button class="nav-link" data-go="new">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            নতুন
+          </button>
+          <a href="#about" class="nav-link">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+            About
+          </a>
+          <a href="#policy" class="nav-link">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 2v4M16 2v4"/></svg>
+            নীতিমালা
+          </a>
+          <a href="#contact" class="nav-link">
+            <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6"/><path d="M3 10l9 6 9-6"/></svg>
+            Contact
+          </a>
+          <span id="navUnderline" class="nav-underline"></span>
+        </nav>
+      </div>
+    </header>
+  </div>
+
+  <!-- Mobile menu -->
+
+  <div id="mobileMenu" class="md:hidden fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50" data-close="menu"></div>
+    <div id="mobilePanel" class="absolute left-0 top-0 h-full w-[78%] max-w-xs bg-base-900 border-r border-white/10 p-4 flex flex-col gap-2">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="logo w-5 h-5"></span><span class="font-bold">মেনু</span>
+        </div>
+        <button class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/15" data-close="menu" aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <button class="nav-link text-left" data-go="today" data-close="menu">আজকের দাম</button>
+      <button class="nav-link text-left" data-go="old" data-close="menu">পুরাতন গহনা</button>
+      <button class="nav-link text-left" data-go="new" data-close="menu">নতুন গহনা</button>
+      <a href="#about" class="nav-link" data-close="menu">About</a>
+      <a href="#policy" class="nav-link" data-close="menu">নীতিমালা</a>
+      <a href="#contact" class="nav-link" data-close="menu">Contact</a>
+      <div class="mt-4 flex items-center gap-2 text-xs">
+        <button id="themeToggle" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/15">Light / Dark</button>
+        <button id="densityToggle" class="px-3 py-1 rounded-full bg-white/10 hover:bg-white/15">Compact</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Firebase Scripts -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyB-D2z6yLSVolxXmVeAd5xG03zC0pzkpU8",
-            authDomain: "cgbazar-a40c0.firebaseapp.com",
-            projectId: "cgbazar-a40c0",
-            storageBucket: "cgbazar-a40c0.firebasestorage.app",
-            messagingSenderId: "33145540262",
-            appId: "1:33145540262:web:2820f803fb1548458f6e67",
-            measurementId: "G-96NYF34CWB"
-        };
+  <!-- TOP BANNER AD -->
 
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(app);
+  <div class="max-w-[min(1100px,92vw)] mx-auto px-4">
+    <div id="ad-top" class="my-4">
+  <!-- Adsterra Banner 320x50 -->
+  <script type="text/javascript">
+    atOptions = {
+      'key' : '593a4db7bbebdab5adfdc7adbc93973a',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/593a4db7bbebdab5adfdc7adbc93973a/invoke.js"></script>
+</div>
 
-        auth.onAuthStateChanged(user => {
-            if (user) window.location.href = "dashboard.html";
-        });
 
-        function toggleForm(formId) {
-            ['loginForm', 'signupForm', 'forgotPasswordForm'].forEach(form => {
-                document.getElementById(form).classList.toggle('hidden', form !== formId);
-            });
-        }
+  <main class="max-w-[min(1100px,92vw)] mx-auto px-4 pb-24 space-y-8">
+    <!-- SECTION: TODAY -->
+    <section data-section="today" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/35 to-fuchsia-500/25">
+      <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">আজকের স্বর্ণের দাম</h3>
+          <span id="status1" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
+        </div>
+        <div class="table-wrap">
+          <table class="rtable min-w-full text-[15px]" id="tableToday">
+            <thead class="bg-amber-500/95 text-black">
+              <tr>
+                <th class="px-4 py-3 text-left">স্বর্ণ</th>
+                <th class="px-4 py-3 text-left">বিবরণ</th>
+                <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২৪ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি বিস্কুট (99.99%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_24k_biscuit_bhori">৳ —</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২৪ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি পাশা স্বর্ণ (99.50%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_24k_pasha_bhori">৳ —</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২৪ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম বিস্কুট (99.99%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_24k_biscuit_gram">৳ —</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAt1">—</span></p>
+      </div>
+    </section>
 
-        async function loginUser() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
+```
+<!-- MID AD -->
+<div id="ad-mid" class="my-4">
+  <!-- Adsterra 300x250 Banner -->
+  <script type="text/javascript">
+    atOptions = {
+      'key' : 'df88a618dbea98e03f01ed5592a4bb5f',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/df88a618dbea98e03f01ed5592a4bb5f/invoke.js"></script>
+</div>
 
-            try {
-                await auth.setPersistence(
-                    rememberMe ? 
-                    firebase.auth.Auth.Persistence.LOCAL : 
-                    firebase.auth.Auth.Persistence.SESSION
-                );
-                await auth.signInWithEmailAndPassword(email, password);
-                window.location.href = "dashboard.html";
-            } catch (error) {
-                alert(`Login Failed: ${error.message}`);
-            }
-        }
 
-        async function signupUser() {
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
+<!-- SECTION: OLD -->
+<section data-section="old" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/18">
+  <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">পুরাতন গহনা ক্রয় বিক্রয়</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="rtable min-w-full text-[15px]" id="tableOld">
+        <thead class="bg-amber-500/95 text-black">
+          <tr>
+            <th class="px-4 py-3 text-left">স্বর্ণ</th>
+            <th class="px-4 py-3 text-left">বিবরণ</th>
+            <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+          <tr>
+            <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
+            <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (91.67%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_bhori">৳ —</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
+            <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (87.50%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_bhori">৳ —</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
+            <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (91.67%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_gram">৳ —</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
+            <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (87.50%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_gram">৳ —</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAtOld">—</span></p>
+  </div>
+</section>
 
-            try {
-                await auth.createUserWithEmailAndPassword(email, password);
-                alert('Account created! Please login.');
-                toggleForm('loginForm');
-            } catch (error) {
-                alert(`Signup Failed: ${error.message}`);
-            }
-        }
+<!-- SECTION: NEW -->
+<section data-section="new" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/22 to-fuchsia-500/12">
+  <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">নতুন গহনা ক্রয়</h3>
+      <span id="status2" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
+    </div>
+    <div class="table-wrap">
+      <table class="rtable min-w-full text-[15px]" id="tableNew">
+        <thead class="bg-amber-500/95 text-black">
+          <tr>
+            <th class="px-4 py-3 text-left">নতুন গহনা ক্রয়</th>
+            <th class="px-4 py-3 text-left">বিবরণ</th>
+            <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+          <tr>
+            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি ভরি</td>
+            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি ভরি</td>
+            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি গ্রাম</td>
+            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি গ্রাম</td>
+            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
+            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAt2">—</span></p>
+  </div>
+</section>
 
-        async function sendPasswordReset() {
-            const email = document.getElementById('resetEmail').value;
+<!-- BOTTOM AD -->
+<div id="ad-bottom" class="my-4">
+  <!-- Adsterra 468x60 Banner -->
+  <script type="text/javascript">
+    atOptions = {
+      'key' : '6cb0634a28f8a5a3a4e2617b4399e3b0',
+      'format' : 'iframe',
+      'height' : 60,
+      'width' : 468,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/6cb0634a28f8a5a3a4e2617b4399e3b0/invoke.js"></script>
+</div>
 
-            try {
-                await auth.sendPasswordResetEmail(email);
-                alert('Password reset email sent!');
-                toggleForm('loginForm');
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            }
-        }
-    </script>
-</body>
-</html>
+<!-- INFO SECTIONS -->
+<section id="about" class="mt-10 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+    <h3 class="text-lg font-semibold mb-2">About</h3>
+    <p class="text-sm text-gray-300 leading-relaxed">এই সাইটে প্রদর্শিত স্বর্ণের দাম Firebase Firestore থেকে রিয়েলটাইমে আপডেট হয়। ডেটা পাবলিক-রিড কনফিগে রাখা হয়েছে এবং শুধুমাত্র অনুমোদিত সোর্স থেকে আপডেট করা হয়।</p>
+    <p class="mt-2 text-xs text-rose-300/90">সর্বশেষ আপডেট: <span id="updatedAtTop">—</span></p>
+  </div>
+</section>
+
+<section id="policy" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+    <h3 class="text-lg font-semibold mb-2">নীতিমালা</h3>
+    <ul class="text-sm text-gray-300 list-disc pl-5 space-y-1">
+      <li>দাম তথ্যগত উদ্দেশ্যে—লেনদেনের আগে যাচাই করুন।</li>
+      <li>Firestore: Public read, write নিষ্ক্রিয় (সিকিউরিটি রুলস মেনে)।</li>
+      <li>বিজ্ঞাপন সক্রিয় থাকলে কুকি/ট্র্যাকিং হতে পারে।</li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+    <h3 class="text-lg font-semibold mb-2">Contact</h3>
+    <form class="grid gap-3 max-w-xl" onsubmit="event.preventDefault(); alert('Demo form. Backend attach করলে সাবমিট হবে.');">
+      <input type="text" name="name" placeholder="আপনার নাম" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
+      <input type="email" name="email" placeholder="ইমেইল" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
+      <textarea name="message" rows="4" placeholder="বার্তা" class="px-3 py-
