@@ -371,4 +371,200 @@
     <form class="grid gap-3 max-w-xl" onsubmit="event.preventDefault(); alert('Demo form. Backend attach করলে সাবমিট হবে.');">
       <input type="text" name="name" placeholder="আপনার নাম" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
       <input type="email" name="email" placeholder="ইমেইল" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
-      <textarea name="message" rows="4" placeholder="বার্তা" class="px-3 py-
+      <textarea name="message" rows="4" placeholder="বার্তা" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required></textarea>
+      <button type="submit" class="justify-self-start px-4 py-2 rounded-lg bg-amber-500 text-black font-semibold hover:bg-amber-400">Send</button>
+      <p class="text-xs text-gray-400">(ডেমো ফর্ম—ব্যাকএন্ড যুক্ত করলে সাবমিট কাজ করবে)</p>
+    </form>
+  </div>
+</section>
+```
+
+  </main>
+
+  <!-- Bottom quick nav (mobile) -->
+
+  <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 md:hidden bottom-tabs">
+    <div class="tabs">
+      <button class="tab active" data-go="today">আজ</button>
+      <button class="tab" data-go="old">পুরাতন</button>
+      <button class="tab" data-go="new">নতুন</button>
+    </div>
+  </nav>
+
+  <!-- Firebase + App Code -->
+
+  <script type="module">
+    // TODO: আপনার Firebase কনফিগ বসান
+   const firebaseConfig = {
+apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
+  authDomain: "goldprice-6db2e.firebaseapp.com",
+  projectId: "goldprice-6db2e",
+  storageBucket: "goldprice-6db2e.firebasestorage.app",
+  messagingSenderId: "666004217573",
+  appId: "1:666004217573:web:832fe85d8b0d1e7b593e0c",
+  measurementId: "G-H8ZZJM7E5C"
+};
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, onSnapshot as onDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const moneyFmt = new Intl.NumberFormat('bn-BD',{ style:'currency', currency:'BDT', maximumFractionDigits:0 });
+
+    function setLiveBadge(el,ok){
+      if(!el) return;
+      el.textContent = ok ? 'Live' : 'Error';
+      el.className = 'text-xs px-2 py-1 rounded-full ' + (ok ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900');
+    }
+    function setUpdated(el, ts){
+  try {
+    const d = ts?.toDate ? ts.toDate() : (ts instanceof Date ? ts : null);
+    if (!d) {
+      el.textContent = '—';
+      return;
+    }
+    // তারিখ + সময় (১২ ঘণ্টা AM/PM ফরম্যাটে)
+    el.textContent = d.toLocaleString('bn-BD', { 
+      timeZone: 'Asia/Dhaka', 
+      hour12: true, 
+      dateStyle: 'short',   
+      timeStyle: 'medium'   
+    });
+  } catch {
+    el.textContent = '—';  }
+    }
+
+    const status1 = document.getElementById('status1');
+    const status2 = document.getElementById('status2');
+    const updatedAt1 = document.getElementById('updatedAt1');
+    const updatedAt2 = document.getElementById('updatedAt2');
+    const updatedAtOld = document.getElementById('updatedAtOld');
+    const updatedAtTop = document.getElementById('updatedAtTop');
+
+    const els = Array.from(document.querySelectorAll('[data-key]'))
+      .reduce((acc, span) => { acc[span.dataset.key] = span; return acc; }, {});
+
+    onSnapshot(collection(db,'prices'), (snap) => {
+      setLiveBadge(status1,true); setLiveBadge(status2,true);
+      snap.docs.forEach(d => {
+        const data = d.data() || {};
+        const key = data.key || d.id;
+        const el = els[key];
+        if (el && typeof data.price === 'number') {
+          const prev = el.getAttribute('data-prev');
+          const next = moneyFmt.format(data.price).replace('৳\u00A0','৳');
+          if(prev!==next){
+            el.textContent = next; el.setAttribute('data-prev', next);
+            const td = el.closest('td'); if(td){ td.classList.add('flash'); setTimeout(()=>td.classList.remove('flash'),700); }
+          }
+        }
+      });
+    }, ()=>{ setLiveBadge(status1,false); setLiveBadge(status2,false); });
+
+    // meta.updatedAt support (optional)
+    onDoc(doc(db,'meta','site'), (d)=>{
+      const data = d.data();
+      [updatedAt1,updatedAt2,updatedAtOld,updatedAtTop].forEach(el=> el && setUpdated(el, data?.updatedAt));
+    });
+
+    // NAV: setView + underline + tabs + drawer
+    function highlightNav(view){
+      document.querySelectorAll('.nav-link[data-go], .tab').forEach(el=>{
+        const match = el.dataset.go === view;
+        el.classList.toggle('active', match);
+      });
+      moveUnderline();
+    }
+    function setView(view){
+      document.body.setAttribute('data-view',view);
+      highlightNav(view);
+      // Scroll to section smoothly (desktop links use anchors for about/policy/contact)
+      const map = {today:'[data-section="today"]', old:'[data-section="old"]', new:'[data-section="new"]'};
+      if(map[view]){
+        const t = document.querySelector(map[view]);
+        if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+    document.querySelectorAll('.nav-link[data-go], .tab').forEach(btn=>{
+      btn.addEventListener('click',()=> setView(btn.dataset.go));
+    });
+
+    // Desktop underline
+    const navUnderline = document.getElementById('navUnderline');
+    function moveUnderline(){
+      const active = document.querySelector('nav .nav-link.active');
+      if(!active || !navUnderline) return;
+      const r = active.getBoundingClientRect();
+      const pr = active.parentElement.getBoundingClientRect();
+      navUnderline.style.width = r.width + 'px';
+      navUnderline.style.transform = `translateX(${r.left - pr.left}px)`;
+    }
+    window.addEventListener('resize', moveUnderline);
+    setTimeout(moveUnderline, 80);
+
+    // Drawer
+    const mMenu=document.getElementById('mobileMenu');
+    const mToggle=document.getElementById('menuToggle');
+    function openMenu(){ mMenu.classList.remove('hidden'); mMenu.classList.add('open'); mToggle?.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ mMenu.classList.add('hidden'); mMenu.classList.remove('open'); mToggle?.setAttribute('aria-expanded','false'); }
+    mToggle?.addEventListener('click',openMenu);
+    mMenu?.addEventListener('click',(e)=>{ if(e.target.closest('[data-close="menu"]') || e.target===mMenu) closeMenu(); });
+    document.querySelectorAll('#mobileMenu .nav-link').forEach(b=>b.addEventListener('click',closeMenu));
+
+    // Sticky effect
+    const topbar=document.getElementById('topbar');
+    document.addEventListener('scroll',()=>{ if(window.scrollY>6){ topbar.classList.add('scrolled'); } else { topbar.classList.remove('scrolled'); } }, {passive:true});
+
+    // Ads (placeholder sizing). Replace with AdSense if needed.
+    function mountPlaceholder(id){
+      const c=document.getElementById(id); if(!c) return;
+      const w=c.clientWidth;
+      const text = w>=970?'970×90' : (w>=728?'728×90' : '320×100');
+      c.querySelector('div').textContent = 'Banner Ad ('+text+')';
+    }
+    ['ad-top','ad-mid','ad-bottom'].forEach(mountPlaceholder);
+    window.addEventListener('resize', ()=>['ad-top','ad-mid','ad-bottom'].forEach(mountPlaceholder));
+
+    // Density + theme toggles (optional—mobile drawerেও আছে)
+    document.getElementById('densityToggle')?.addEventListener('click',()=>{
+      document.querySelectorAll('table.rtable td, table.rtable th').forEach(el=>{
+        el.classList.toggle('py-2'); el.classList.toggle('py-3');
+      });
+    });
+    document.getElementById('themeToggle')?.addEventListener('click',()=>{
+      document.documentElement.classList.toggle('dark');
+    });
+  </script>
+
+  <!--
+  Firestore data model (উদাহরণ):
+  Collection: prices
+    Doc ID: price_24k_biscuit_bhori { key:"price_24k_biscuit_bhori", price:158969 }
+    Doc ID: price_24k_pasha_bhori   { key:"price_24k_pasha_bhori",   price:158174 }
+    Doc ID: price_24k_biscuit_gram  { key:"price_24k_biscuit_gram",  price:13634 }
+    Doc ID: price_old_22k_bhori     { key:"price_old_22k_bhori",     price:145727 }
+    Doc ID: price_old_21k_bhori     { key:"price_old_21k_bhori",     price:139098 }
+    Doc ID: price_old_22k_gram      { key:"price_old_22k_gram",      price:12498 }
+    Doc ID: price_old_21k_gram      { key:"price_old_21k_gram",      price:11929 }
+    Doc ID: price_new_22k_bhori     { key:"price_new_22k_bhori",     price:165200 }
+    Doc ID: price_new_21k_bhori     { key:"price_new_21k_bhori",     price:157697 }
+    Doc ID: price_new_22k_gram      { key:"price_new_22k_gram",      price:14164 }
+    Doc ID: price_new_21k_gram      { key:"price_new_21k_gram",      price:13520 }
+
+  Optional Collection: meta
+    Doc: site { updatedAt: serverTimestamp() }
+
+  Security rules (public read, no write):
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{database}/documents {
+      match /prices/{docId} { allow read: if true; allow write: if false; }
+      match /meta/{docId}   { allow read: if true; allow write: if false; }
+    }
+  }
+  -->
+
+</body>
+</html>
