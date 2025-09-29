@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="bn" class="dark">
 <head>
   <meta charset="UTF-8" />
@@ -26,81 +25,77 @@
   <style>
     html { scroll-behavior: smooth; }
 
-```
-/* Background */
-.bgfx{position:fixed; inset:0; z-index:-1;}
-.bgfx::before{
-  content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(251,191,36,.12), transparent),
-    radial-gradient(900px 500px at 100% 10%, rgba(168,85,247,.10), transparent);
-}
+    /* Background */
+    .bgfx{position:fixed; inset:0; z-index:-1;}
+    .bgfx::before{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(251,191,36,.12), transparent),
+        radial-gradient(900px 500px at 100% 10%, rgba(168,85,247,.10), transparent);
+    }
 
-/* Topbar (modern) */
-.topbar{ transition: background-color .2s, box-shadow .2s, border-color .2s; }
-.topbar.scrolled{ background: rgba(11,11,15,.82); box-shadow: 0 8px 24px rgba(0,0,0,.22); border-color: rgba(255,255,255,.12); }
+    /* Topbar (modern) */
+    .topbar{ transition: background-color .2s, box-shadow .2s, border-color .2s; }
+    .topbar.scrolled{ background: rgba(11,11,15,.82); box-shadow: 0 8px 24px rgba(0,0,0,.22); border-color: rgba(255,255,255,.12); }
 
-.brand{ display:inline-flex; align-items:center; gap:.55rem; }
-.logo{
-  position:relative; width:28px; height:28px; border-radius:999px;
-  background: radial-gradient(circle at 30% 30%, #fbbf24, transparent 60%),
-              radial-gradient(circle at 70% 70%, #a855f7, transparent 60%), #0b0b0f;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 0 18px rgba(251,191,36,.18);
-}
-.logo::after{ content:""; position:absolute; inset:0; border-radius:inherit; border:1px solid rgba(255,255,255,.12); }
+    .brand{ display:inline-flex; align-items:center; gap:.55rem; }
+    .logo{
+      position:relative; width:28px; height:28px; border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #fbbf24, transparent 60%),
+                  radial-gradient(circle at 70% 70%, #a855f7, transparent 60%), #0b0b0f;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 0 18px rgba(251,191,36,.18);
+    }
+    .logo::after{ content:""; position:absolute; inset:0; border-radius:inherit; border:1px solid rgba(255,255,255,.12); }
 
-.nav-link{ position:relative; padding:.55rem .95rem; border-radius:999px; font-weight:600; font-size:13px; opacity:.95; display:inline-flex; align-items:center; gap:.45rem; }
-.nav-link:hover{ background: rgba(255,255,255,.08); }
-.nav-link.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:#fff; }
-.nav-icon{ width:16px; height:16px; opacity:.9 }
+    .nav-link{ position:relative; padding:.55rem .95rem; border-radius:999px; font-weight:600; font-size:13px; opacity:.95; display:inline-flex; align-items:center; gap:.45rem; }
+    .nav-link:hover{ background: rgba(255,255,255,.08); }
+    .nav-link.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:#fff; }
+    .nav-icon{ width:16px; height:16px; opacity:.9 }
 
-.nav-rail{ position:relative; }
-.nav-underline{ position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,#fbbf24,#a855f7); border-radius:2px; transition:.25s; opacity:.85 }
+    .nav-rail{ position:relative; }
+    .nav-underline{ position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,#fbbf24,#a855f7); border-radius:2px; transition:.25s; opacity:.85 }
 
-/* Drawer */
-#mobilePanel{ transform: translateX(-100%); transition: transform .28s ease; }
-#mobileMenu.open #mobilePanel{ transform: translateX(0); }
+    /* Drawer */
+    #mobilePanel{ transform: translateX(-100%); transition: transform .28s ease; }
+    #mobileMenu.open #mobilePanel{ transform: translateX(0); }
 
-/* Cards / tables */
-.glass{ backdrop-filter:saturate(140%) blur(14px) }
-.table-wrap{ position:relative; overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.1); }
-.table-wrap::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:28px; pointer-events:none; background:linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.22)); }
-@media (min-width: 640px){ .table-wrap::after{ display:none } }
+    /* Cards / tables */
+    .glass{ backdrop-filter:saturate(140%) blur(14px) }
+    .table-wrap{ position:relative; overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.1); }
+    .table-wrap::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:28px; pointer-events:none; background:linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.22)); }
+    @media (min-width: 640px){ .table-wrap::after{ display:none } }
 
-.flash{ animation:flashBg .9s ease-out }
-@keyframes flashBg{ 0%{ background:linear-gradient(90deg,rgba(251,191,36,.22),transparent)} 100%{ background:transparent } }
+    .flash{ animation:flashBg .9s ease-out }
+    @keyframes flashBg{ 0%{ background:linear-gradient(90deg,rgba(251,191,36,.22),transparent)} 100%{ background:transparent } }
 
-/* Mobile: table -> cards */
-@media (max-width:640px){
-  table.rtable{ width:100%; border-collapse:separate; border-spacing:0; }
-  table.rtable thead{ display:none; }
-  table.rtable tbody{ display:block; }
-  table.rtable tr{ display:grid; grid-template-columns:1fr; gap:.35rem; margin:10px 0; padding:.6rem .7rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.14); }
-  table.rtable td{ display:flex; justify-content:space-between; align-items:center; padding:.45rem .25rem; }
-  table.rtable td::before{ content: attr(data-label); font-weight:600; color:#a3a3a3; margin-right:.75rem; }
-  table.rtable td.price{ justify-content:flex-end; font-weight:800; font-size:clamp(16px,5.2vw,22px); color:#facc15; letter-spacing:.2px; }
-  table.rtable td[data-label="মূল্য (BDT)"]{ border-top:1px dashed rgba(255,255,255,.16); padding-top:.6rem; }
-}
+    /* Mobile: table -> cards */
+    @media (max-width:640px){
+      table.rtable{ width:100%; border-collapse:separate; border-spacing:0; }
+      table.rtable thead{ display:none; }
+      table.rtable tbody{ display:block; }
+      table.rtable tr{ display:grid; grid-template-columns:1fr; gap:.35rem; margin:10px 0; padding:.6rem .7rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.14); }
+      table.rtable td{ display:flex; justify-content:space-between; align-items:center; padding:.45rem .25rem; }
+      table.rtable td::before{ content: attr(data-label); font-weight:600; color:#a3a3a3; margin-right:.75rem; }
+      table.rtable td.price{ justify-content:flex-end; font-weight:800; font-size:clamp(16px,5.2vw,22px); color:#facc15; letter-spacing:.2px; }
+      table.rtable td[data-label="মূল্য (BDT)"]{ border-top:1px dashed rgba(255,255,255,.16); padding-top:.6rem; }
+    }
 
-/* Ads */
-.ad-banner{ display:flex; align-items:center; justify-content:center; border-radius:16px; background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.16); color:#bbb; text-align:center; margin:12px 0; overflow:hidden; min-height:90px; position:relative }
-.ad-label{ position:absolute; top:6px; right:10px; font-size:10px; letter-spacing:.08em; opacity:.7 }
-@media(max-width:640px){ .ad-banner{ min-height:100px } }
+    /* Ads */
+    .ad-banner{ display:flex; align-items:center; justify-content:center; border-radius:16px; background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.16); color:#bbb; text-align:center; margin:12px 0; overflow:hidden; min-height:90px; position:relative }
+    .ad-label{ position:absolute; top:6px; right:10px; font-size:10px; letter-spacing:.08em; opacity:.7 }
+    @media(max-width:640px){ .ad-banner{ min-height:100px } }
 
-/* Tabs (mobile quick nav bottom) */
-.tabs{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; background:rgba(255,255,255,.05); padding:6px; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
-.tab{ padding:.5rem .8rem; border-radius:999px; text-align:center; font-weight:600; font-size:13px; opacity:.9; }
-.tab.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:white; }
-@media(min-width:1024px){ .tabs, .bottom-tabs{ display:none } }
-```
-
+    /* Tabs (mobile quick nav bottom) */
+    .tabs{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; background:rgba(255,255,255,.05); padding:6px; border-radius:999px; border:1px solid rgba(255,255,255,.12); }
+    .tab{ padding:.5rem .8rem; border-radius:999px; text-align:center; font-weight:600; font-size:13px; opacity:.9; }
+    .tab.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:white; }
+    @media(min-width:1024px){ .tabs, .bottom-tabs{ display:none } }
   </style>
 </head>
 <body class="bg-base-900 text-gray-100 antialiased selection:bg-amber-400/40" data-view="today">
   <div class="bgfx"></div>
 
   <!-- Topbar -->
-
   <div id="topbar" class="topbar sticky top-0 z-40 backdrop-blur-xl bg-base-900/70 border-b border-white/10">
     <header class="max-w-[min(1100px,92vw)] mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-3">
@@ -109,7 +104,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
           </button>
           <span class="logo shrink-0"></span>
-          <h1 class="truncate text-[clamp(18px,4.2vw,28px)] font-extrabold tracking-[-0.02em] text-white">CG BAZAR</h1>
+          <h1 class="truncate text-[clamp(18px,4.2vw,28px)] font-extrabold tracking-[-0.02em] text-white">স্বর্ণের বাজার মূল্য</h1>
         </div>
         <nav class="hidden md:flex items-center gap-2 nav-rail">
           <button class="nav-link" data-go="today">
@@ -143,7 +138,6 @@
   </div>
 
   <!-- Mobile menu -->
-
   <div id="mobileMenu" class="md:hidden fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/50" data-close="menu"></div>
     <div id="mobilePanel" class="absolute left-0 top-0 h-full w-[78%] max-w-xs bg-base-900 border-r border-white/10 p-4 flex flex-col gap-2">
@@ -169,22 +163,21 @@
   </div>
 
   <!-- TOP BANNER AD -->
-
   <div class="max-w-[min(1100px,92vw)] mx-auto px-4">
     <div id="ad-top" class="my-4">
-  <!-- Adsterra Banner 320x50 -->
-  <script type="text/javascript">
-    atOptions = {
-      'key' : '593a4db7bbebdab5adfdc7adbc93973a',
-      'format' : 'iframe',
-      'height' : 50,
-      'width' : 320,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/593a4db7bbebdab5adfdc7adbc93973a/invoke.js"></script>
-</div>
-
+      <!-- Adsterra Banner 320x50 -->
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '593a4db7bbebdab5adfdc7adbc93973a',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/593a4db7bbebdab5adfdc7adbc93973a/invoke.js"></script>
+    </div>
+  </div>
 
   <main class="max-w-[min(1100px,92vw)] mx-auto px-4 pb-24 space-y-8">
     <!-- SECTION: TODAY -->
@@ -226,149 +219,161 @@
       </div>
     </section>
 
-```
-<!-- MID AD -->
-<div id="ad-mid" class="my-4">
-  <!-- Adsterra 300x250 Banner -->
-  <script type="text/javascript">
-    atOptions = {
-      'key' : 'df88a618dbea98e03f01ed5592a4bb5f',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/df88a618dbea98e03f01ed5592a4bb5f/invoke.js"></script>
-</div>
-
-
-<!-- SECTION: OLD -->
-<section data-section="old" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/18">
-  <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">পুরাতন গহনা ক্রয় বিক্রয়</h3>
+    <!-- MID AD -->
+    <div id="ad-mid" class="my-4">
+      <!-- Adsterra 300x250 Banner -->
+      <script type="text/javascript">
+        atOptions = {
+          'key' : 'df88a618dbea98e03f01ed5592a4bb5f',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/df88a618dbea98e03f01ed5592a4bb5f/invoke.js"></script>
     </div>
-    <div class="table-wrap">
-      <table class="rtable min-w-full text-[15px]" id="tableOld">
-        <thead class="bg-amber-500/95 text-black">
-          <tr>
-            <th class="px-4 py-3 text-left">স্বর্ণ</th>
-            <th class="px-4 py-3 text-left">বিবরণ</th>
-            <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-white/5 bg-neutral-900/30">
-          <tr>
-            <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
-            <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (91.67%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_bhori">৳ —</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
-            <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (87.50%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_bhori">৳ —</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
-            <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (91.67%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_gram">৳ —</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
-            <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (87.50%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_gram">৳ —</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAtOld">—</span></p>
-  </div>
-</section>
 
-<!-- SECTION: NEW -->
-<section data-section="new" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/22 to-fuchsia-500/12">
-  <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">নতুন গহনা ক্রয়</h3>
-      <span id="status2" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
-    </div>
-    <div class="table-wrap">
-      <table class="rtable min-w-full text-[15px]" id="tableNew">
-        <thead class="bg-amber-500/95 text-black">
-          <tr>
-            <th class="px-4 py-3 text-left">নতুন গহনা ক্রয়</th>
-            <th class="px-4 py-3 text-left">বিবরণ</th>
-            <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-white/5 bg-neutral-900/30">
-          <tr>
-            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি ভরি</td>
-            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি ভরি</td>
-            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি গ্রাম</td>
-            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি গ্রাম</td>
-            <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
-            <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAt2">—</span></p>
-  </div>
-</section>
+    <!-- SECTION: OLD -->
+    <section data-section="old" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/18">
+      <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">পুরাতন গহনা ক্রয় বিক্রয়</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="rtable min-w-full text-[15px]" id="tableOld">
+            <thead class="bg-amber-500/95 text-black">
+              <tr>
+                <th class="px-4 py-3 text-left">স্বর্ণ</th>
+                <th class="px-4 py-3 text-left">বিবরণ</th>
+                <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (91.67%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_bhori">৳ —</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি ভরি গহনা (87.50%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_bhori">৳ —</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২২ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (91.67%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_22k_gram">৳ —</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="স্বর্ণ">২১ ক্যারেট</td>
+                <td class="px-4 py-3" data-label="বিবরণ">প্রতি গ্রাম গহনা (87.50%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_old_21k_gram">৳ —</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAtOld">—</span></p>
+      </div>
+    </section>
 
-<!-- INFO SECTIONS -->
-<section id="about" class="mt-10 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
-  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
-    <h3 class="text-lg font-semibold mb-2">About</h3>
-    <p class="text-sm text-gray-300 leading-relaxed">আমরা একটি তথ্যভিত্তিক প্ল্যাটফর্ম, যেখানে সহজভাবে সোনার বাজারের নির্ভরযোগ্য আপডেট ও দরকারী তথ্য উপস্থাপন করা হয়।</p>
-    <p class="mt-2 text-xs text-rose-300/90">সর্বশেষ আপডেট: <span id="updatedAtTop">—</span></p>
-  </div>
-</section>
+    <!-- SECTION: NEW -->
+    <section data-section="new" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/22 to-fuchsia-500/12">
+      <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">নতুন গহনা ক্রয়</h3>
+          <span id="status2" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
+        </div>
+        <div class="table-wrap">
+          <table class="rtable min-w-full text-[15px]" id="tableNew">
+            <thead class="bg-amber-500/95 text-black">
+              <tr>
+                <th class="px-4 py-3 text-left">নতুন গহনা ক্রয়</th>
+                <th class="px-4 py-3 text-left">বিবরণ</th>
+                <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+              <tr>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি ভরি</td>
+                <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি ভরি</td>
+                <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি গ্রাম</td>
+                <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি গ্রাম</td>
+                <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
+                <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-rose-300/90 text-xs">সর্বশেষ আপডেট: <span id="updatedAt2">—</span></p>
+      </div>
+    </section>
 
-<section id="policy" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
-  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
-    <h3 class="text-lg font-semibold mb-2">সোনার দাম আপডেট নীতিমালা</h3>
-    <ul class="text-sm text-gray-300 list-disc pl-5 space-y-1">
-      <li>আমরা প্রতিদিন সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা পর্যন্ত ৫ থেকে ৮ বার নতুন সোনার দাম আপডেট করি।</li>
-      <li>**আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।**</li>
-      <li>আমরা বাংলাদেশের আইন ও বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS) এর নীতিমালা অনুসরণ করে সোনার দাম আপডেট করি।</li>
-       <li>এই ওয়েবসাইটে প্রদত্ত **সোনার দাম শুধুমাত্র তথ্যের জন্য**। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</li>
-    </ul>
-  </div>
-</section>
+    <!-- INFO SECTIONS -->
+    <section id="about" class="mt-10 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+      <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+        <h3 class="text-lg font-semibold mb-2">About</h3>
+        <p class="text-sm text-gray-300 leading-relaxed">আমরা একটি তথ্যভিত্তিক প্ল্যাটফর্ম, যেখানে সহজভাবে সোনার বাজারের নির্ভরযোগ্য আপডেট ও দরকারী তথ্য উপস্থাপন করা হয়।</p>
+        <p class="mt-2 text-xs text-rose-300/90">সর্বশেষ আপডেট: <span id="updatedAtTop">—</span></p>
+      </div>
+    </section>
 
-<section id="contact" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
-  <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
-    <h3 class="text-lg font-semibold mb-2">Contact</h3>
-    <form class="grid gap-3 max-w-xl" onsubmit="event.preventDefault(); alert('Demo form. Backend attach করলে সাবমিট হবে.');">
-      <input type="text" name="name" placeholder="আপনার নাম" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
-      <input type="email" name="email" placeholder="ইমেইল" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
-      <textarea name="message" rows="4" placeholder="বার্তা" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required></textarea>
-      <button type="submit" class="justify-self-start px-4 py-2 rounded-lg bg-amber-500 text-black font-semibold hover:bg-amber-400">Send</button>
-      <p class="text-xs text-gray-400">(ডেমো ফর্ম—ব্যাকএন্ড যুক্ত করলে সাবমিট কাজ করবে)</p>
-    </form>
-  </div>
-</section>
-```
+    <section id="policy" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+      <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+        <h3 class="text-lg font-semibold mb-2">সোনার দাম আপডেট নীতিমালা</h3>
+        <ul class="text-sm text-gray-300 list-disc pl-5 space-y-1">
+          <li>আমরা প্রতিদিন সকাল ১০:০০ টা থেকে বিকাল ৫:০০ টা পর্যন্ত ৫ থেকে ৮ বার নতুন সোনার দাম আপডেট করি।</li>
+          <li><strong>আন্তর্জাতিক বাজারে শনিবার ও রবিবার লেনদেন বন্ধ থাকে, তাই এই দুই দিন আনুমানিক মূল্য আপডেট করা হবে।</strong></li>
+          <li>আমরা বাংলাদেশের আইন ও বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS) এর নীতিমালা অনুসরণ করে সোনার দাম আপডেট করি।</li>
+          <li>এই ওয়েবসাইটে প্রদত্ত <strong>সোনার দাম শুধুমাত্র তথ্যের জন্য</strong>। বাজার পরিস্থিতি পরিবর্তন হতে পারে, তাই কেনাবেচার সিদ্ধান্ত নেওয়ার আগে যাচাই করে নিন।</li>
+        </ul>
+      </div>
+    </section>
 
+    <!-- CONTACT (Formspree connected) -->
+    <section id="contact" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
+      <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
+        <h3 class="text-lg font-semibold mb-2">Contact</h3>
+
+        <form class="grid gap-3 max-w-xl"
+              action="https://formspree.io/f/myznedlp"
+              method="POST" accept-charset="UTF-8">
+          <input type="text" name="name" placeholder="আপনার নাম"
+                 class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
+          <input type="email" name="email" placeholder="ইমেইল"
+                 class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required>
+          <textarea name="message" rows="4" placeholder="বার্তা"
+                    class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required></textarea>
+
+          <!-- Optional helpers -->
+          <input type="hidden" name="_subject"  value="নতুন কন্টাক্ট সাবমিশন">
+          <!-- <input type="hidden" name="_redirect" value="https://your-domain.com/thanks.html"> -->
+          <input type="text"   name="_gotcha"  style="display:none">
+
+          <button type="submit"
+                  class="justify-self-start px-4 py-2 rounded-lg bg-amber-500 text-black font-semibold hover:bg-amber-400">
+            Send
+          </button>
+
+          <p class="text-xs text-gray-400">ফর্ম সাবমিট করলে তথ্য সরাসরি আপনার কাছে যাবে।</p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <!-- Bottom quick nav (mobile) -->
-
   <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 md:hidden bottom-tabs">
     <div class="tabs">
       <button class="tab active" data-go="today">আজ</button>
@@ -378,18 +383,17 @@
   </nav>
 
   <!-- Firebase + App Code -->
-
   <script type="module">
-    // TODO: আপনার Firebase কনফিগ বসান
-   const firebaseConfig = {
-apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
-  authDomain: "goldprice-6db2e.firebaseapp.com",
-  projectId: "goldprice-6db2e",
-  storageBucket: "goldprice-6db2e.firebasestorage.app",
-  messagingSenderId: "666004217573",
-  appId: "1:666004217573:web:832fe85d8b0d1e7b593e0c",
-  measurementId: "G-H8ZZJM7E5C"
-};
+    // Firebase config (already provided)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
+      authDomain: "goldprice-6db2e.firebaseapp.com",
+      projectId: "goldprice-6db2e",
+      storageBucket: "goldprice-6db2e.firebasestorage.app",
+      messagingSenderId: "666004217573",
+      appId: "1:666004217573:web:832fe85d8b0d1e7b593e0c",
+      measurementId: "G-H8ZZJM7E5C"
+    };
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, onSnapshot, doc, onSnapshot as onDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -405,21 +409,16 @@ apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
       el.className = 'text-xs px-2 py-1 rounded-full ' + (ok ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900');
     }
     function setUpdated(el, ts){
-  try {
-    const d = ts?.toDate ? ts.toDate() : (ts instanceof Date ? ts : null);
-    if (!d) {
-      el.textContent = '—';
-      return;
-    }
-    // তারিখ + সময় (১২ ঘণ্টা AM/PM ফরম্যাটে)
-    el.textContent = d.toLocaleString('bn-BD', { 
-      timeZone: 'Asia/Dhaka', 
-      hour12: true, 
-      dateStyle: 'short',   
-      timeStyle: 'medium'   
-    });
-  } catch {
-    el.textContent = '—';  }
+      try {
+        const d = ts?.toDate ? ts.toDate() : (ts instanceof Date ? ts : null);
+        if (!d) { el.textContent = '—'; return; }
+        el.textContent = d.toLocaleString('bn-BD', {
+          timeZone: 'Asia/Dhaka',
+          hour12: true,
+          dateStyle: 'short',
+          timeStyle: 'medium'
+        });
+      } catch { el.textContent = '—'; }
     }
 
     const status1 = document.getElementById('status1');
@@ -466,7 +465,6 @@ apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
     function setView(view){
       document.body.setAttribute('data-view',view);
       highlightNav(view);
-      // Scroll to section smoothly (desktop links use anchors for about/policy/contact)
       const map = {today:'[data-section="today"]', old:'[data-section="old"]', new:'[data-section="new"]'};
       if(map[view]){
         const t = document.querySelector(map[view]);
@@ -503,17 +501,18 @@ apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
     const topbar=document.getElementById('topbar');
     document.addEventListener('scroll',()=>{ if(window.scrollY>6){ topbar.classList.add('scrolled'); } else { topbar.classList.remove('scrolled'); } }, {passive:true});
 
-    // Ads (placeholder sizing). Replace with AdSense if needed.
+    // Ads placeholder sizing (safe if ad slots missing)
     function mountPlaceholder(id){
       const c=document.getElementById(id); if(!c) return;
       const w=c.clientWidth;
       const text = w>=970?'970×90' : (w>=728?'728×90' : '320×100');
-      c.querySelector('div').textContent = 'Banner Ad ('+text+')';
+      const inner = c.querySelector('div');
+      if(inner) inner.textContent = 'Banner Ad ('+text+')';
     }
     ['ad-top','ad-mid','ad-bottom'].forEach(mountPlaceholder);
     window.addEventListener('resize', ()=>['ad-top','ad-mid','ad-bottom'].forEach(mountPlaceholder));
 
-    // Density + theme toggles (optional—mobile drawerেও আছে)
+    // Density + theme toggles
     document.getElementById('densityToggle')?.addEventListener('click',()=>{
       document.querySelectorAll('table.rtable td, table.rtable th').forEach(el=>{
         el.classList.toggle('py-2'); el.classList.toggle('py-3');
@@ -551,6 +550,5 @@ apiKey: "AIzaSyDt5cJ0LIrZV5NGPS02QeEj9zogPyMm3Wg",
     }
   }
   -->
-
 </body>
 </html>
