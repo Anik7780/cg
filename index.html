@@ -23,16 +23,77 @@
     }
   </script>
   <style>
-    html { scroll-behavior: smooth; }
+ /* Wrapper: চাইলে swipe/pan দিতে overflow-x:auto ব্যবহার করতে পারেন */
+.iframe-zoom-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;          /* যদি কাটে, এটা বদলে overflow-x:auto করুন */
+  border: none;
+}
 
-    /* Background */
-    .bgfx{position:fixed; inset:0; z-index:-1;}
-    .bgfx::before{
-      content:""; position:absolute; inset:0;
-      background:
-        radial-gradient(1200px 600px at 10% -10%, rgba(251,191,36,.12), transparent),
-        radial-gradient(900px 500px at 100% 10%, rgba(168,85,247,.10), transparent);
-    }
+/* iPhone SE ডিফল্ট (বড় করা) */
+.iframe-zoom {
+  width: 125%;
+  height: 70vh;
+  border: 0;
+  transform: scale(0.85);      /* আগে 0.78 ছিল → একটু বড় */
+  transform-origin: top center;
+}
+
+/* ~375px (Mini) */
+@media (min-width: 375px){
+  .iframe-zoom {
+    width: 120%;
+    height: 72vh;
+    transform: scale(0.88);    /* আগে 0.82 → বড় */
+  }
+}
+
+/* ~414px (বড় iPhone) */
+@media (min-width: 414px){
+  .iframe-zoom {
+    width: 115%;
+    height: 75vh;
+    transform: scale(0.92);    /* আগে 0.85 → বড় */
+  }
+}
+
+/* Tablet (>=768px) */
+@media (min-width: 768px){
+  .iframe-zoom {
+    width: 110%;
+    height: 76vh;
+    transform: scale(0.95);    /* আগে 0.9 → বড় */
+  }
+}
+
+/* Desktop (>=1024px) */
+@media (min-width: 1024px){
+  .iframe-zoom {
+    width: 100%;
+    height: 80vh;
+    transform: scale(1);       /* ডেস্কটপে নরমাল রাখলাম (কাটার ঝুঁকি কম) */
+  }
+}
+
+/* Tablets (>=768px) */
+@media (min-width: 768px){
+  .iframe-zoom {
+    width: 110%;
+    height: 72vh;
+    transform: scale(0.9);
+  }
+}
+
+/* Desktop (>=1024px) */
+@media (min-width: 1024px){
+  .iframe-zoom {
+    width: 100%;
+    height: 78vh;
+    transform: scale(1);
+  }
+}
 
     /* Topbar (modern) */
     .topbar{ transition: background-color .2s, box-shadow .2s, border-color .2s; }
@@ -322,6 +383,30 @@
     </section>
 
     <!-- INFO SECTIONS -->
+  <!-- SECTION: SHEET (above About) -->
+<section id="sheet" class="mt-10 md:p-[1px] rounded-2xl md:bg-gradient-to-br md:from-amber-400/18 md:to-fuchsia-500/12">
+  <div class="rounded-2xl bg-neutral-900/70 glass shadow-soft shadow-ring p-0 md:p-7 md:border md:border-white/10">
+    <h3 class="text-lg font-semibold mb-3 px-5 md:px-0">Dhaka Gold Price</h3>
+
+    <!-- Responsive iframe wrapper (centered) -->
+    <div class="iframe-zoom-wrapper edge-mobile sm:mx-0 sm:rounded-xl sm:overflow-hidden">
+      <iframe
+        src="https://docs.google.com/spreadsheets/d/13IK4AQFx4kBeHi-hNsEuxnD7PVgD11sf2ZSA1VCPNi0/pubhtml?widget=true&headers=false"
+        class="iframe-zoom"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+      ></iframe>
+    </div>
+
+    <p class="mt-2 text-xs text-gray-400 px-5 md:px-0">
+      
+    </p>
+  </div>
+</section>
+
+
+
+
     <section id="about" class="mt-10 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
       <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
         <h3 class="text-lg font-semibold mb-2">About</h3>
@@ -383,6 +468,8 @@
   </nav>
 
   <!-- Firebase + App Code -->
+
+
   <script type="module">
     // Firebase config (already provided)
     const firebaseConfig = {
