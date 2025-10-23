@@ -32,12 +32,12 @@
   border: none;
 }
 
-/* iPhone SE ডিফল্ট (বড় করা) */
+/* iPhone SE ডিফল্ট (বড় করা) */
 .iframe-zoom {
   width: 125%;
   height: 70vh;
   border: 0;
-  transform: scale(0.85);      /* আগে 0.78 ছিল → একটু বড় */
+  transform: scale(0.85);      /* আগে 0.78 ছিল → একটু বড় */
   transform-origin: top center;
 }
 
@@ -46,16 +46,16 @@
   .iframe-zoom {
     width: 120%;
     height: 72vh;
-    transform: scale(0.88);    /* আগে 0.82 → বড় */
+    transform: scale(0.88);    /* আগে 0.82 → বড় */
   }
 }
 
-/* ~414px (বড় iPhone) */
+/* ~414px (বড় iPhone) */
 @media (min-width: 414px){
   .iframe-zoom {
     width: 115%;
     height: 75vh;
-    transform: scale(0.92);    /* আগে 0.85 → বড় */
+    transform: scale(0.92);    /* আগে 0.85 → বড় */
   }
 }
 
@@ -64,7 +64,7 @@
   .iframe-zoom {
     width: 110%;
     height: 76vh;
-    transform: scale(0.95);    /* আগে 0.9 → বড় */
+    transform: scale(0.95);    /* আগে 0.9 → বড় */
   }
 }
 
@@ -126,8 +126,18 @@
     .table-wrap::after{ content:""; position:absolute; right:0; top:0; bottom:0; width:28px; pointer-events:none; background:linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.22)); }
     @media (min-width: 640px){ .table-wrap::after{ display:none } }
 
+    /* --- Flash animation for price changes --- */
     .flash{ animation:flashBg .9s ease-out }
-    @keyframes flashBg{ 0%{ background:linear-gradient(90deg,rgba(251,191,36,.22),transparent)} 100%{ background:transparent } }
+    @keyframes flashBg{ 
+      0%{ background:rgba(251,191,36,.22) } 
+      100%{ background:transparent } 
+    }
+    /* --- Flash animation for USD table --- */
+    .flash-usd{ animation:flashBgUsd .9s ease-out }
+    @keyframes flashBgUsd{ 
+      0%{ background:rgba(59, 130, 246, 0.25) } /* Blue flash */
+      100%{ background:transparent } 
+    }
 
     /* Mobile: table -> cards */
     @media (max-width:640px){
@@ -137,8 +147,17 @@
       table.rtable tr{ display:grid; grid-template-columns:1fr; gap:.35rem; margin:10px 0; padding:.6rem .7rem; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,.14); }
       table.rtable td{ display:flex; justify-content:space-between; align-items:center; padding:.45rem .25rem; }
       table.rtable td::before{ content: attr(data-label); font-weight:600; color:#a3a3a3; margin-right:.75rem; }
-      table.rtable td.price{ justify-content:flex-end; font-weight:800; font-size:clamp(16px,5.2vw,22px); color:#facc15; letter-spacing:.2px; }
-      table.rtable td[data-label="মূল্য (BDT)"]{ border-top:1px dashed rgba(255,255,255,.16); padding-top:.6rem; }
+      /* Price column in mobile card view */
+      table.rtable td.price{ 
+        justify-content:flex-end; font-weight:800; font-size:clamp(16px,5.2vw,22px); 
+        color:#facc15; /* Default yellow for Firebase tables */
+        letter-spacing:.2px; 
+      }
+      /* USD table specific price color */
+      table.rtable td.price-usd{
+        color: #60a5fa; /* Blue for USD table */
+      }
+      table.rtable td[data-label^="মূল্য ("]{ border-top:1px dashed rgba(255,255,255,.16); padding-top:.6rem; }
     }
 
     /* Ads */
@@ -156,7 +175,6 @@
 <body class="bg-base-900 text-gray-100 antialiased selection:bg-amber-400/40" data-view="today">
   <div class="bgfx"></div>
 
-  <!-- Topbar -->
   <div id="topbar" class="topbar sticky top-0 z-40 backdrop-blur-xl bg-base-900/70 border-b border-white/10">
     <header class="max-w-[min(1100px,92vw)] mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-3">
@@ -198,7 +216,6 @@
     </header>
   </div>
 
-  <!-- Mobile menu -->
   <div id="mobileMenu" class="md:hidden fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/50" data-close="menu"></div>
     <div id="mobilePanel" class="absolute left-0 top-0 h-full w-[78%] max-w-xs bg-base-900 border-r border-white/10 p-4 flex flex-col gap-2">
@@ -223,10 +240,8 @@
     </div>
   </div>
 
-  <!-- TOP BANNER AD -->
   <div class="max-w-[min(1100px,92vw)] mx-auto px-4">
     <div id="ad-top" class="my-4">
-      <!-- Adsterra Banner 320x50 -->
       <script type="text/javascript">
         atOptions = {
           'key' : '593a4db7bbebdab5adfdc7adbc93973a',
@@ -241,11 +256,63 @@
   </div>
 
   <main class="max-w-[min(1100px,92vw)] mx-auto px-4 pb-24 space-y-8">
-    <!-- SECTION: TODAY -->
+
+    <section class="p-[1px] rounded-2xl bg-gradient-to-br from-blue-400/35 to-green-500/25">
+      <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">আন্তর্জাতিক বাজার (USD)</h3>
+          <span id="api_status_usd" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
+        </div>
+        <div class="table-wrap">
+          <table class="rtable min-w-full text-[15px]">
+            <thead class="bg-blue-600/95 text-white"> <tr>
+                <th class="px-4 py-3 text-left">Unit</th>
+                <th class="px-4 py-3 text-left">Description</th>
+                <th class="px-4 py-3 text-left">Price (USD) / Change</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 bg-neutral-900/30">
+              <tr id="api-row-ounce">
+                <td class="px-4 py-3" data-label="Unit">Ounce (আউন্স)</td>
+                <td class="px-4 py-3" data-label="Description">প্রতি আউন্স (31.1035g)</td>
+                <td class="px-4 py-3 price price-usd" data-label="মূল্য (USD)">
+                  <div class="flex items-center justify-end gap-2">
+                    <span id="api-price-ounce" class="text-blue-400 text-lg">Loading...</span>
+                    <span id="api-change-ounce" class="text-sm font-normal"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr id="api-row-vori">
+                <td class="px-4 py-3" data-label="Unit">Vori (ভরি)</td>
+                <td class="px-4 py-3" data-label="Description">প্রতি ভরি (11.664g)</td>
+                <td class="px-4 py-3 price price-usd" data-label="মূল্য (USD)">
+                   <div class="flex items-center justify-end gap-2">
+                    <span id="api-price-vori" class="text-blue-400 text-lg">Loading...</span>
+                    <span id="api-change-vori" class="text-sm font-normal"></span>
+                  </div>
+                </td>
+              </tr>
+              <tr id="api-row-gram">
+                <td class="px-4 py-3" data-label="Unit">Gram (গ্রাম)</td>
+                <td class="px-4 py-3" data-label="Description">প্রতি গ্রাম (1g)</td>
+                <td class="px-4 py-3 price price-usd" data-label="মূল্য (USD)">
+                   <div class="flex items-center justify-end gap-2">
+                    <span id="api-price-gram" class="text-blue-400 text-lg">Loading...</span>
+                    <span id="api-change-gram" class="text-sm font-normal"></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-blue-300/90 text-xs">সর্বশেষ আপডেট: <span id="api-updatedAt">...</span></p>
+      </div>
+    </section>
+
     <section data-section="today" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/35 to-fuchsia-500/25">
       <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">আজকের স্বর্ণের দাম</h3>
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">আজকের স্বর্ণের দাম (BDT)</h3>
           <span id="status1" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
         </div>
         <div class="table-wrap">
@@ -280,9 +347,7 @@
       </div>
     </section>
 
-    <!-- MID AD -->
     <div id="ad-mid" class="my-4">
-      <!-- Adsterra 300x250 Banner -->
       <script type="text/javascript">
         atOptions = {
           'key' : 'df88a618dbea98e03f01ed5592a4bb5f',
@@ -295,11 +360,10 @@
       <script type="text/javascript" src="//www.highperformanceformat.com/df88a618dbea98e03f01ed5592a4bb5f/invoke.js"></script>
     </div>
 
-    <!-- SECTION: OLD -->
     <section data-section="old" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/30 to-fuchsia-500/18">
       <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">পুরাতন গহনা ক্রয় বিক্রয়</h3>
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">পুরাতন গহনা ক্রয় বিক্রয়</h3>
         </div>
         <div class="table-wrap">
           <table class="rtable min-w-full text-[15px]" id="tableOld">
@@ -338,40 +402,39 @@
       </div>
     </section>
 
-    <!-- SECTION: NEW -->
     <section data-section="new" class="p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/22 to-fuchsia-500/12">
       <div class="relative rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">নতুন গহনা ক্রয়</h3>
+          <h3 class="text-[clamp(16px,3.5vw,20px)] font-semibold">নতুন গহনা ক্রয়</h3>
           <span id="status2" class="text-xs px-2 py-1 rounded-full bg-neutral-800">Connecting…</span>
         </div>
         <div class="table-wrap">
           <table class="rtable min-w-full text-[15px]" id="tableNew">
             <thead class="bg-amber-500/95 text-black">
               <tr>
-                <th class="px-4 py-3 text-left">নতুন গহনা ক্রয়</th>
+                <th class="px-4 py-3 text-left">নতুন গহনা ক্রয়</th>
                 <th class="px-4 py-3 text-left">বিবরণ</th>
                 <th class="px-4 py-3 text-left">মূল্য (BDT)</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/5 bg-neutral-900/30">
               <tr>
-                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি ভরি</td>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি ভরি</td>
                 <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
                 <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
               </tr>
               <tr>
-                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি ভরি</td>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি ভরি</td>
                 <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
                 <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_bhori">৳ —</span> <span class="text-xs opacity-70">/ ভরি</span></td>
               </tr>
               <tr>
-                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি গ্রাম</td>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২২ ক্যারেট প্রতি গ্রাম</td>
                 <td class="px-4 py-3" data-label="বিবরণ">গহনা (৯১.৬৭%)</td>
                 <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_22k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
               </tr>
               <tr>
-                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি গ্রাম</td>
+                <td class="px-4 py-3" data-label="নতুন গহনা ক্রয়">২১ ক্যারেট প্রতি গ্রাম</td>
                 <td class="px-4 py-3" data-label="বিবরণ">গহনা (৮৭.৫০%)</td>
                 <td class="px-4 py-3 price" data-label="মূল্য (BDT)"><span data-key="price_new_21k_gram">৳ —</span> <span class="text-xs opacity-70">/ গ্রাম</span></td>
               </tr>
@@ -382,13 +445,10 @@
       </div>
     </section>
 
-    <!-- INFO SECTIONS -->
-  <!-- SECTION: SHEET (above About) -->
-<section id="sheet" class="mt-10 md:p-[1px] rounded-2xl md:bg-gradient-to-br md:from-amber-400/18 md:to-fuchsia-500/12">
+    <section id="sheet" class="mt-10 md:p-[1px] rounded-2xl md:bg-gradient-to-br md:from-amber-400/18 md:to-fuchsia-500/12">
   <div class="rounded-2xl bg-neutral-900/70 glass shadow-soft shadow-ring p-0 md:p-7 md:border md:border-white/10">
     <h3 class="text-lg font-semibold mb-3 px-5 md:px-0">Dhaka Gold Price</h3>
 
-    <!-- Responsive iframe wrapper (centered) -->
     <div class="iframe-zoom-wrapper edge-mobile sm:mx-0 sm:rounded-xl sm:overflow-hidden">
       <iframe
         src="https://docs.google.com/spreadsheets/d/13IK4AQFx4kBeHi-hNsEuxnD7PVgD11sf2ZSA1VCPNi0/pubhtml?widget=true&headers=false"
@@ -403,8 +463,6 @@
     </p>
   </div>
 </section>
-
-
 
 
     <section id="about" class="mt-10 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
@@ -427,7 +485,6 @@
       </div>
     </section>
 
-    <!-- CONTACT (Formspree connected) -->
     <section id="contact" class="mt-6 p-[1px] rounded-2xl bg-gradient-to-br from-amber-400/15 to-fuchsia-500/10">
       <div class="rounded-2xl p-5 md:p-7 bg-neutral-900/70 glass shadow-soft shadow-ring border border-white/10">
         <h3 class="text-lg font-semibold mb-2">Contact</h3>
@@ -442,9 +499,7 @@
           <textarea name="message" rows="4" placeholder="বার্তা"
                     class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 outline-none focus:border-white/20" required></textarea>
 
-          <!-- Optional helpers -->
           <input type="hidden" name="_subject"  value="নতুন কন্টাক্ট সাবমিশন">
-          <!-- <input type="hidden" name="_redirect" value="https://your-domain.com/thanks.html"> -->
           <input type="text"   name="_gotcha"  style="display:none">
 
           <button type="submit"
@@ -458,7 +513,6 @@
     </section>
   </main>
 
-  <!-- Bottom quick nav (mobile) -->
   <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 md:hidden bottom-tabs">
     <div class="tabs">
       <button class="tab active" data-go="today">আজ</button>
@@ -466,9 +520,6 @@
       <button class="tab" data-go="new">নতুন</button>
     </div>
   </nav>
-
-  <!-- Firebase + App Code -->
-
 
   <script type="module">
     // Firebase config (already provided)
@@ -489,6 +540,127 @@
     const db = getFirestore(app);
 
     const moneyFmt = new Intl.NumberFormat('bn-BD',{ style:'currency', currency:'BDT', maximumFractionDigits:0 });
+
+    // =================================================================
+    // === START: gold-api.com (USD) LOGIC (Notun Add Kora Holo) ===
+    // =================================================================
+    
+    const API_URL = "https://api.gold-api.com/price/XAU";
+    const GRAMS_PER_OUNCE = 31.1034768;
+    const GRAMS_PER_VORI = 11.664;
+    
+    // Global variables to store the last prices for comparison
+    let lastOuncePrice = 0;
+    let lastVoriPrice = 0;
+    let lastGramPrice = 0;
+    const usdApiStatusEl = document.getElementById('api_status_usd');
+    const usdApiUpdatedEl = document.getElementById('api-updatedAt');
+
+    /**
+     * Helper function to format price and calculate/display change
+     * (USD Table Version)
+     */
+    function updateUsdPriceCell(priceElId, indicatorElId, rowElId, currentPrice, lastPrice) {
+      const priceEl = document.getElementById(priceElId);
+      const indicatorEl = document.getElementById(indicatorElId);
+      const rowEl = document.getElementById(rowElId);
+
+      // 1. Format the main price
+      const formattedPrice = currentPrice.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      priceEl.textContent = `$${formattedPrice}`; // Add $ sign
+
+      // 2. Calculate and format the change
+      let changeAmount = 0;
+      if (lastPrice !== 0 && currentPrice !== 0) {
+        changeAmount = currentPrice - lastPrice;
+      }
+      const formattedChange = changeAmount.toFixed(2);
+
+      // 3. Set indicator text and color
+      let indicatorText = '';
+      let indicatorColor = 'text-gray-500'; // Default: Grey
+
+      if (changeAmount > 0) {
+        indicatorText = `+${formattedChange}`;
+        indicatorColor = 'text-green-500'; // Green for Up
+      } else if (changeAmount < 0) {
+        indicatorText = `${formattedChange}`; // Negative sign is included
+        indicatorColor = 'text-red-500'; // Red for Down
+      } else {
+        indicatorText = '(±0.00)';
+      }
+
+      indicatorEl.textContent = indicatorText;
+      indicatorEl.className = `text-sm font-normal ${indicatorColor}`;
+      
+      // Add flash animation to the row
+      if (lastPrice !== 0 && lastPrice !== currentPrice && rowEl) {
+        rowEl.classList.add('flash-usd');
+        setTimeout(() => rowEl.classList.remove('flash-usd'), 900);
+      }
+
+      return currentPrice;
+    }
+
+    /**
+     * Fetches data from the Gold API and updates the HTML table.
+     */
+    async function fetchAndUpdateUsdPrice() {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Update status badge
+        if (usdApiStatusEl) {
+          usdApiStatusEl.textContent = 'Live';
+          usdApiStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-green-200 text-green-900';
+        }
+
+        const currentOuncePrice = parseFloat(data.price);
+        if (isNaN(currentOuncePrice) || currentOuncePrice === 0) {
+          throw new Error("Invalid price data from API.");
+        }
+
+        const currentGramPrice = currentOuncePrice / GRAMS_PER_OUNCE;
+        const currentVoriPrice = currentGramPrice * GRAMS_PER_VORI;
+
+        // Update all three price rows
+        lastOuncePrice = updateUsdPriceCell('api-price-ounce', 'api-change-ounce', 'api-row-ounce', currentOuncePrice, lastOuncePrice);
+        lastVoriPrice = updateUsdPriceCell('api-price-vori', 'api-change-vori', 'api-row-vori', currentVoriPrice, lastVoriPrice);
+        lastGramPrice = updateUsdPriceCell('api-price-gram', 'api-change-gram', 'api-row-gram', currentGramPrice, lastGramPrice);
+
+        // Update footer
+        if (usdApiUpdatedEl) {
+            const date = new Date(data.updatedAt);
+            usdApiUpdatedEl.textContent = `${data.updatedAtReadable} | ${date.toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka', hour12: true, dateStyle: 'short', timeStyle: 'medium' })}`;
+        }
+
+      } catch (error) {
+        console.error("Failed to fetch USD price data:", error);
+        if (usdApiStatusEl) {
+          usdApiStatusEl.textContent = 'Error';
+          usdApiStatusEl.className = 'text-xs px-2 py-1 rounded-full bg-red-200 text-red-900';
+        }
+        if(usdApiUpdatedEl) usdApiUpdatedEl.textContent = `Connection Error.`;
+      }
+    }
+
+    // Run the USD price fetcher
+    fetchAndUpdateUsdPrice();
+    setInterval(fetchAndUpdateUsdPrice, 30000); // Refresh every 30 seconds
+
+    // =================================================================
+    // === END: gold-api.com (USD) LOGIC ===
+    // =================================================================
+
+
+
+    // =================================================================
+    // === START: FIREBASE (BDT) LOGIC (Apnar original code) ===
+    // =================================================================
 
     function setLiveBadge(el,ok){
       if(!el) return;
@@ -529,7 +701,9 @@
           const next = moneyFmt.format(data.price).replace('৳\u00A0','৳');
           if(prev!==next){
             el.textContent = next; el.setAttribute('data-prev', next);
-            const td = el.closest('td'); if(td){ td.classList.add('flash'); setTimeout(()=>td.classList.remove('flash'),700); }
+            // Original code used 'td' for flash, using 'el.closest' is safer
+            const td = el.closest('td.price'); 
+            if(td){ td.classList.add('flash'); setTimeout(()=>td.classList.remove('flash'), 900); }
           }
         }
       });
@@ -540,6 +714,15 @@
       const data = d.data();
       [updatedAt1,updatedAt2,updatedAtOld,updatedAtTop].forEach(el=> el && setUpdated(el, data?.updatedAt));
     });
+
+    // =================================================================
+    // === END: FIREBASE (BDT) LOGIC ===
+    // =================================================================
+
+
+    // =================================================================
+    // === START: NAVIGATION & UI LOGIC (Apnar original code) ===
+    // =================================================================
 
     // NAV: setView + underline + tabs + drawer
     function highlightNav(view){
@@ -573,7 +756,7 @@
       navUnderline.style.transform = `translateX(${r.left - pr.left}px)`;
     }
     window.addEventListener('resize', moveUnderline);
-    setTimeout(moveUnderline, 80);
+    setTimeout(moveUnderline, 80); // Set initial position
 
     // Drawer
     const mMenu=document.getElementById('mobileMenu');
@@ -608,34 +791,14 @@
     document.getElementById('themeToggle')?.addEventListener('click',()=>{
       document.documentElement.classList.toggle('dark');
     });
+
+    // Set initial view
+    highlightNav('today');
+    // =================================================================
+    // === END: NAVIGATION & UI LOGIC ===
+    // =================================================================
+
   </script>
 
-  <!--
-  Firestore data model (উদাহরণ):
-  Collection: prices
-    Doc ID: price_24k_biscuit_bhori { key:"price_24k_biscuit_bhori", price:158969 }
-    Doc ID: price_24k_pasha_bhori   { key:"price_24k_pasha_bhori",   price:158174 }
-    Doc ID: price_24k_biscuit_gram  { key:"price_24k_biscuit_gram",  price:13634 }
-    Doc ID: price_old_22k_bhori     { key:"price_old_22k_bhori",     price:145727 }
-    Doc ID: price_old_21k_bhori     { key:"price_old_21k_bhori",     price:139098 }
-    Doc ID: price_old_22k_gram      { key:"price_old_22k_gram",      price:12498 }
-    Doc ID: price_old_21k_gram      { key:"price_old_21k_gram",      price:11929 }
-    Doc ID: price_new_22k_bhori     { key:"price_new_22k_bhori",     price:165200 }
-    Doc ID: price_new_21k_bhori     { key:"price_new_21k_bhori",     price:157697 }
-    Doc ID: price_new_22k_gram      { key:"price_new_22k_gram",      price:14164 }
-    Doc ID: price_new_21k_gram      { key:"price_new_21k_gram",      price:13520 }
-
-  Optional Collection: meta
-    Doc: site { updatedAt: serverTimestamp() }
-
-  Security rules (public read, no write):
-  rules_version = '2';
-  service cloud.firestore {
-    match /databases/{database}/documents {
-      match /prices/{docId} { allow read: if true; allow write: if false; }
-      match /meta/{docId}   { allow read: if true; allow write: if false; }
-    }
-  }
-  -->
 </body>
 </html>
