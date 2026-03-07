@@ -170,6 +170,9 @@
     .tab{ padding:.5rem .8rem; border-radius:999px; text-align:center; font-weight:600; font-size:13px; opacity:.9; }
     .tab.active{ background:linear-gradient(180deg, rgba(251,191,36,.25), rgba(168,85,247,.18)); color:white; }
     @media(min-width:1024px){ .tabs, .bottom-tabs{ display:none } }
+    
+    /* Popup Animation Class */
+    #popupContent.show { transform: scale(1) !important; opacity: 1 !important; }
   </style>
 </head>
 <body class="bg-base-900 text-gray-100 antialiased selection:bg-amber-400/40" data-view="today">
@@ -521,6 +524,31 @@
     </div>
   </nav>
 
+  <div id="closurePopup" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-4">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="popupOverlay"></div>
+    <div class="relative bg-neutral-900 border border-white/10 p-6 md:p-8 rounded-2xl max-w-md w-full shadow-2xl transform transition-all scale-95 opacity-0" id="popupContent">
+      <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h2 class="text-xl md:text-2xl font-bold text-center text-white mb-2">জরুরী নোটিশ!</h2>
+      <p class="text-gray-300 text-center text-sm md:text-base mb-6 leading-relaxed">
+        দুঃখিত, আমাদের এই ওয়েবসাইটটি আগামী <span class="text-red-400 font-bold">৩১শে মার্চ, ২০২৬</span> তারিখে স্থায়ীভাবে বন্ধ হয়ে যাবে।WhatsApp-01909252357
+      </p>
+
+      <div class="grid grid-cols-4 gap-2 mb-6">
+        <div class="bg-white/5 p-2 rounded-lg text-center"><div id="days" class="text-xl font-bold text-amber-500">00</div><div class="text-[10px] uppercase text-gray-500">দিন</div></div>
+        <div class="bg-white/5 p-2 rounded-lg text-center"><div id="hours" class="text-xl font-bold text-amber-500">00</div><div class="text-[10px] uppercase text-gray-500">ঘণ্টা</div></div>
+        <div class="bg-white/5 p-2 rounded-lg text-center"><div id="minutes" class="text-xl font-bold text-amber-500">00</div><div class="text-[10px] uppercase text-gray-500">মিনিট</div></div>
+        <div class="bg-white/5 p-2 rounded-lg text-center"><div id="seconds" class="text-xl font-bold text-amber-500">00</div><div class="text-[10px] uppercase text-gray-500">সেকেন্ড</div></div>
+      </div>
+
+      <button id="closePopupBtn" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-colors">
+        ঠিক আছে
+      </button>
+    </div>
+  </div>
   <script type="module">
     // Firebase config (already provided)
     const firebaseConfig = {
@@ -796,6 +824,55 @@
     highlightNav('today');
     // =================================================================
     // === END: NAVIGATION & UI LOGIC ===
+    // =================================================================
+
+
+    // =================================================================
+    // === START: CLOSURE POPUP WARNING & TIMER LOGIC (NEW) ===
+    // =================================================================
+    const closureDate = new Date("March 31, 2026 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const gap = closureDate - now;
+
+      if (gap <= 0) {
+        document.getElementById('closurePopup').classList.add('hidden');
+        return;
+      }
+
+      const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+      const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = d.toString().padStart(2, '0');
+      document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+      document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+      document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+    }
+
+    // Show Popup and Start Timer on Load
+    window.addEventListener('load', () => {
+      const popup = document.getElementById('closurePopup');
+      const content = document.getElementById('popupContent');
+      
+      popup.classList.remove('hidden');
+      setTimeout(() => {
+        content.classList.add('show');
+      }, 100);
+
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+    });
+
+    // Close Popup Button Event
+    document.getElementById('closePopupBtn').addEventListener('click', () => {
+      const popup = document.getElementById('closurePopup');
+      popup.classList.add('hidden');
+    });
+    // =================================================================
+    // === END: CLOSURE POPUP WARNING & TIMER LOGIC ===
     // =================================================================
 
   </script>
